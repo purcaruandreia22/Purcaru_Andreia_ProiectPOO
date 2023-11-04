@@ -1,0 +1,386 @@
+//Nume: Purcaru Andreia D...
+//Domeniul ales: PAnDemie
+//Clasele alese: Spital, Vaccin, Pacient
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Spital
+{
+public:
+    const int anConstructie;
+
+    string denumireSpital;
+    char* orasSpital;
+    float suprafataMp;
+    int nrMedici;
+    string* numeMedici;
+    bool existaPacientiLaAti;
+
+    static bool autorizatieFunctionare;
+
+
+    // Constructor cu toți parametrii
+    Spital(int anConstructie, string denumireSpital, const char* orasSpital, float suprafataMp, int nrMedici, string* numeMedici, bool existaPacientiLaAti) :anConstructie(anConstructie)
+    {
+        this->denumireSpital = denumireSpital;
+        this->orasSpital = new char[strlen(orasSpital) + 1];
+        strcpy(this->orasSpital, orasSpital);
+        this->suprafataMp = suprafataMp;
+        this->nrMedici = nrMedici;
+        this->numeMedici = new string[this->nrMedici];
+        for (int i = 0; i < this->nrMedici; i++)
+            this->numeMedici[i] = numeMedici[i];
+        this->existaPacientiLaAti = existaPacientiLaAti;
+    }
+
+
+    // Constructor fără parametrii
+    Spital() : anConstructie(0)
+    {
+        this->denumireSpital = "Necunoscuta";
+        this->orasSpital = new char[strlen("Necunoscut") + 1];
+        strcpy(this->orasSpital, "Necunoscut");
+        this->suprafataMp = 0;
+        this->nrMedici = 0;
+        this->numeMedici = NULL;
+        this->existaPacientiLaAti = 0;
+    }
+
+
+    // Constructor cu 2 parametri
+    Spital(string denumireSpital, float suprafataMp) : anConstructie(0)
+    {
+        this->denumireSpital = denumireSpital;
+        this->orasSpital = new char[strlen("Necunoscut") + 1];
+        strcpy(this->orasSpital, "Necunoscut");
+        this->suprafataMp = suprafataMp;
+        this->nrMedici = 0;
+        this->numeMedici = NULL;
+        this->existaPacientiLaAti = 0;
+    }
+
+
+    //metoda afisare
+    void afisare()
+    {
+        cout << "An constructie spital:" << this->anConstructie << endl;
+        cout << "Orasul in care se afla spitalul:" << this->orasSpital << endl;
+        cout << "Suprafata in mp a spitalului:" << this->suprafataMp << endl;
+        cout << "Numarul de medici din spital:" << this->nrMedici << endl;
+        cout << "Numele medicilor din spital:";
+        for (int i = 0; i < this->nrMedici; i++)
+        {
+            cout << this->numeMedici[i] << " ; ";
+        }
+        cout << endl;
+        cout << "Exista pacienti la ATI?:";
+        if (this->existaPacientiLaAti == 1)
+        {
+            cout << "DA!" << endl;
+        }
+        else
+        {
+            cout << "NU!" << endl;
+        }
+    }
+
+    //functie statica pentru a afisa daca un spital are autorizatie de functiionare sau nu
+    static void AfisareAutorizatieFunctionare(Spital autorizatie)
+    {
+        if (autorizatie.autorizatieFunctionare)
+        {
+               cout << "Spitalul "<<autorizatie.denumireSpital << " are autorizatie de functionare." << endl;
+        }
+        else
+        {
+            cout << "Spitalul "<<autorizatie.denumireSpital << " nu are autorizatie de functionare." << endl;
+        }
+    }
+   
+};
+
+bool Spital::autorizatieFunctionare = 1;
+
+class VaccinCovid
+{
+public:
+    const int temperaturaPastrareCelsius;
+    string numeVaccin;
+    float eficacitate;
+    int nrDoze;
+    bool necesitaRefrigerare;
+
+    int nrCentreVaccinare;
+    int* stocVaccinInCentreleDeVaccinare;
+
+    static string numeAfectiune;
+
+    // Constructor cu toti parametrii
+    VaccinCovid(int temperaturaPastrareCelsius, string numeVaccin, float eficacitate, int nrDoze, bool necesitaRefrigerare, int nrCentreVaccinare, int* stocVaccinInCentreleDeVaccinare) :temperaturaPastrareCelsius(temperaturaPastrareCelsius)
+    {
+        this->numeVaccin = numeVaccin;
+        this->eficacitate = eficacitate;
+        this->nrDoze = nrDoze;
+        this->necesitaRefrigerare = necesitaRefrigerare;
+        this->nrCentreVaccinare = nrCentreVaccinare;
+        this->stocVaccinInCentreleDeVaccinare = new int[this->nrCentreVaccinare];
+        for (int i = 0; i < this->nrCentreVaccinare; i++)
+        {
+            this->stocVaccinInCentreleDeVaccinare[i] = stocVaccinInCentreleDeVaccinare[i];
+        }
+    }
+
+
+    // Constructor cu 3 parametrii
+    VaccinCovid(float eficacitate, int nrDoze, bool necesitaRefrigerare) :temperaturaPastrareCelsius(0)
+    {
+        this->numeVaccin = "Necunoscut";
+        this->eficacitate = eficacitate;
+        this->nrDoze = nrDoze;
+        this->necesitaRefrigerare = necesitaRefrigerare;
+        this->nrCentreVaccinare = 0;
+        this->stocVaccinInCentreleDeVaccinare = NULL;
+    }
+
+
+    // Constructor fara parametri
+    VaccinCovid() :temperaturaPastrareCelsius(0)
+    {
+        this->numeVaccin = "Necunoscut";
+        this->eficacitate = 0;
+        this->nrDoze = 0;
+        this->necesitaRefrigerare = 0;
+        this->nrCentreVaccinare = 0;
+        this->stocVaccinInCentreleDeVaccinare = NULL;
+    }
+
+    //metoda afisare
+    void afisare()
+    {
+        cout << "Temperatura de pastrare in grade Celsius a vaccinului este:" << this->temperaturaPastrareCelsius << endl;
+        cout << "Numele vaccinului este:" << this->numeVaccin << endl;
+        cout << "Eficacitatea vaccinului este:" << this->eficacitate << endl;
+        cout << "Nr de doze necesar este:" << this->nrDoze << endl;
+        cout << "Necesita refrigerare?:";
+        if (this->necesitaRefrigerare == 1)
+        {
+            cout << "DA!" << endl;
+        }
+        else
+        {
+            cout << "NU!" << endl;
+        }
+        cout << "Nr de centre de vaccinare in care se regaseste vaccinul:" << this->nrCentreVaccinare << endl;
+        cout << "Stocul din centrele de vaccinare:";
+        for (int i = 0; i < this->nrCentreVaccinare; i++)
+        {
+            cout << this->stocVaccinInCentreleDeVaccinare[i] << " ; ";
+        }
+        cout << endl;
+    }
+
+    //functie statica petru a afisa daca un vaccin necesita refrigerare sau nu
+    static void verificaNecesitateRefrigerare(VaccinCovid vaccin)
+    {
+        if (vaccin.necesitaRefrigerare)
+        {
+            cout << "Vaccinul " << vaccin.numeVaccin << " necesita refrigerare." << endl;
+        }
+        else
+        {
+            cout << "Vaccinul " << vaccin.numeVaccin << " nu necesita refrigerare." << endl;
+        }
+    }
+   
+};
+
+string VaccinCovid::numeAfectiune = "COVID-19";
+
+
+
+class Pacient
+{
+public:
+    const string CNP;
+    string numePrenume;
+    int varsta;
+    float greutate;
+    bool esteInternat;
+    int nrSpitalizari;
+    float* costuriSpitalizare;
+
+    static int taxaAsigurareMedicala;
+
+
+    //constructor cu toti parametrii
+    Pacient(string CNP, string numePrenume, int varsta, float greutate, bool esteInternat, int nrSpitalizari, float* costuriSpitalizare) :CNP(CNP)
+    {
+        this->numePrenume = numePrenume;
+        this->varsta = varsta;
+        this->greutate = greutate;
+        this->esteInternat = esteInternat;
+        this->nrSpitalizari = nrSpitalizari;
+        this->costuriSpitalizare = new float[this->nrSpitalizari];
+        for (int i = 0; i < this->nrSpitalizari; i++)
+        {
+            this->costuriSpitalizare[i] = costuriSpitalizare[i];
+        }
+    }
+
+
+    //constructor cu un parametru
+    Pacient(string numePrenume) :CNP("0")
+    {
+        this->numePrenume = numePrenume;
+        this->varsta = 0;
+        this->greutate = 0;
+        this->esteInternat = 0;
+        this->nrSpitalizari = 0;
+        this->costuriSpitalizare = NULL;
+    }
+
+
+    //constructor fara parametrii
+    Pacient() :CNP("0")
+    {
+        this->numePrenume = "Anonim";
+        this->varsta = 0;
+        this->greutate = 0;
+        this->esteInternat = 0;
+        this->nrSpitalizari = 0;
+        this->costuriSpitalizare = NULL;
+    }
+
+
+
+    //metoda afisare
+    void afisare()
+    {
+        cout << "CNP=ul pacientului este:" << this->CNP << endl;
+        cout << "Numele si prenumele pacientului este:" << this->numePrenume << endl;
+        cout << "Varsta este:" << this->varsta << endl;
+        cout << "Greutatea este:" << this->greutate << endl;
+        cout << "Este internat?:";
+        if (this->esteInternat == 1)
+        {
+            cout << "DA!" << endl;
+        }
+        else
+        {
+            cout << "NU!" << endl;
+        }
+        cout << "Nr spitalizari pacient:" << this->nrSpitalizari << endl;
+        cout << "Costul spitalizarilor:";
+        for (int i = 0; i < this->nrSpitalizari; i++)
+        {
+            cout << this->costuriSpitalizare[i] << " ; ";
+        }
+        cout << endl;
+    }
+
+    //functie statica care afiseaza daca un pacient a platit taxa de asigurare sau nu
+    static void verificaTaxaAsigurare(Pacient pacient)
+    {
+        if (pacient.taxaAsigurareMedicala)
+        {
+            cout << "Pacientul " << pacient.numePrenume << " a platit taxa de asigurare medicala." << endl;
+        }
+        else
+        {
+            cout << "Pacientul " << pacient.numePrenume << " nu a platit taxa de asigurare medicala." << endl;
+        }
+    }
+    
+};
+
+
+int Pacient::taxaAsigurareMedicala = 1800;
+
+
+void main()
+{
+    //Clasa Spital:
+
+    string nume[] = { "Matei", "Vasilescu", "Ciolacu", "Marin", "Diaconu" };
+    Spital s1(1975, "MarieCurie", "Bucuresti", 150.7, 5, nume, 0);
+
+
+    Spital s2;
+
+    Spital s3("SfantaMaria", 305.5);
+
+    cout << "Spitalul s1: " << endl;
+    s1.afisare();
+    Spital::AfisareAutorizatieFunctionare(s1);
+    cout << endl << endl;
+
+    cout << "Spitalul s2: " << endl;
+    s2.afisare();
+    Spital::AfisareAutorizatieFunctionare(s2);
+    cout << endl << endl;
+
+    cout << "Spitalul s3: " << endl;
+    s3.afisare();
+    Spital::AfisareAutorizatieFunctionare(s3);
+    cout << endl << endl;
+
+
+    cout << endl << endl << endl << endl << endl << endl;
+
+    //Clasa Vaccin:
+
+    int stoc[] = { 150,70,90,100,40,12 };
+    VaccinCovid v1(0, "AstraZeneca", 0.7, 2, 1, 6, stoc);
+
+    VaccinCovid v2(0.65, 1, 1);
+
+    VaccinCovid v3;
+
+
+    cout << "Vaccinul v1: " << endl;
+    v1.afisare();
+    VaccinCovid::verificaNecesitateRefrigerare(v1);
+    cout << endl << endl;
+
+    cout << "Vaccinul v2: " << endl;
+    v2.afisare();
+    VaccinCovid::verificaNecesitateRefrigerare(v2);
+    cout << endl << endl;
+
+    cout << "Vaccinul v3: " << endl;
+    v3.afisare();
+    VaccinCovid::verificaNecesitateRefrigerare(v3);
+    cout << endl << endl;
+
+
+
+    cout << endl << endl << endl << endl << endl << endl;
+
+    //Clasa Pacient:
+
+    float spitalizari[] = { 1400.9,560.9,3500.99,300.2 };;
+    Pacient p1("2781026483927", "JuncuMarina", 45, 78.5, 1, 4, spitalizari);
+
+    Pacient p2("Ghenade Mihai");
+
+    Pacient p3;
+
+    cout << "Pacientul p1: " << endl;
+    p1.afisare();
+    Pacient::verificaTaxaAsigurare(p1);
+    cout << endl << endl;
+
+    cout << "Pacientul p2: " << endl;
+    p2.afisare();
+    Pacient::verificaTaxaAsigurare(p2);
+     cout << endl << endl;
+
+    cout << "Pacientul p3: " << endl;
+    p3.afisare();
+    Pacient::verificaTaxaAsigurare(p3);
+    cout << endl << endl;
+
+}
