@@ -1,4 +1,4 @@
-//Nume: Purcaru Andreia Daniela
+//Nume: Purcaru Andreia D...
 //Domeniul ales: PAnDemie
 //Clasele alese: Spital, Vaccin, Pacient
 
@@ -9,7 +9,7 @@ using namespace std;
 
 class Spital
 {
-public:
+private:
     const int anConstructie;
 
     string denumireSpital;
@@ -20,6 +20,7 @@ public:
     bool existaPacientiLaAti;
 
     static bool autorizatieFunctionare;
+public:
 
 
     // Constructor cu toți parametrii
@@ -63,6 +64,143 @@ public:
     }
 
 
+    //destructor
+    ~Spital()
+    {
+        if (this->orasSpital != NULL)
+        {
+            delete[] this->orasSpital;
+        }
+        if (this->numeMedici != NULL)
+        {
+            delete[] this->numeMedici;
+        }
+
+    }
+
+
+    //constructor copiere
+    Spital(const Spital& obj) :anConstructie(obj.anConstructie)
+    {
+        this->denumireSpital = obj.denumireSpital;
+        this->orasSpital = new char[strlen(obj.orasSpital) + 1];
+        strcpy(this->orasSpital, obj.orasSpital);
+        this->suprafataMp = obj.suprafataMp;
+        this->nrMedici = obj.nrMedici;
+        this->numeMedici = new string[this->nrMedici];
+        for (int i = 0; i < this->nrMedici; i++)
+
+            this->numeMedici[i] = obj.numeMedici[i];
+        this->existaPacientiLaAti = obj.existaPacientiLaAti;
+
+    }
+
+
+    //operatorul =
+    Spital& operator=(const Spital& obj)
+    {
+        if (this->orasSpital != NULL)
+        {
+            delete[] this->orasSpital;
+        }
+        if (this->numeMedici != NULL)
+        {
+            delete[] this->numeMedici;
+        }
+        this->denumireSpital = obj.denumireSpital;
+        this->orasSpital = new char[strlen(obj.orasSpital) + 1];
+        strcpy(this->orasSpital, obj.orasSpital);
+        this->suprafataMp = obj.suprafataMp;
+        this->nrMedici = obj.nrMedici;
+        this->numeMedici = new string[this->nrMedici];
+        for (int i = 0; i < this->nrMedici; i++)
+
+            this->numeMedici[i] = obj.numeMedici[i];
+        this->existaPacientiLaAti = obj.existaPacientiLaAti;
+
+        return *this;
+    }
+
+
+    //getteri
+
+    int getAnConstructie()
+    {
+        return this->anConstructie;
+    }
+
+    string getDenumireSpital()
+    {
+        return this->denumireSpital;
+    }
+
+    char* getOrasSpital()
+    {
+        return this->orasSpital;
+    }
+
+    float getSuprafataMp()
+    {
+        return this->suprafataMp;
+    }
+
+    int getNrMedici()
+    {
+        return this->nrMedici;
+    }
+
+    string* getNumeMedici()
+    {
+        return this->numeMedici;
+    }
+
+    bool getExistaPacientiLaAti()
+    {
+        return this->existaPacientiLaAti;
+    }
+
+
+    //setteri
+    void setDenumireSpital(string denumireNouaSpital)
+    {
+        this->denumireSpital = denumireNouaSpital;
+    }
+
+    void setOrasSpital(const char* orasNouSpital)
+    {
+        if (this->orasSpital != NULL)
+        {
+            delete[] this->orasSpital;
+        }
+
+        this->orasSpital = new char[strlen(orasNouSpital) + 1];
+        strcpy(this->orasSpital, orasNouSpital);
+    }
+
+    void setSuprafataMp(float suprafataNouaMp)
+    {
+        this->suprafataMp = suprafataNouaMp;
+    }
+
+    void setMedici(int nrNouMedici, string* numeMediciNoi)
+    {
+        if (this->numeMedici != NULL)
+        {
+            delete[] this->numeMedici;
+        }
+
+        this->nrMedici = nrNouMedici;
+        this->numeMedici = new string[this->nrMedici];
+        for (int i = 0; i < this->nrMedici; i++)
+            this->numeMedici[i] = numeMediciNoi[i];
+    }
+
+    void setExistaPacientiLaAti(bool existaPacientiLaAtiNou)
+    {
+        this->existaPacientiLaAti = existaPacientiLaAtiNou;
+    }
+
+
     //metoda afisare
     void afisare()
     {
@@ -92,31 +230,49 @@ public:
     {
         if (autorizatie.autorizatieFunctionare)
         {
-               cout << "Spitalul "<<autorizatie.denumireSpital << " are autorizatie de functionare." << endl;
+            cout << "Spitalul " << autorizatie.denumireSpital << " are autorizatie de functionare." << endl;
         }
         else
         {
-            cout << "Spitalul "<<autorizatie.denumireSpital << " nu are autorizatie de functionare." << endl;
+            cout << "Spitalul " << autorizatie.denumireSpital << " nu are autorizatie de functionare." << endl;
         }
     }
-   
+
+    //functie statica pentru afisarea atributului static
+    static bool getAutorizatieFunctionare()
+    {
+        return autorizatieFunctionare;
+    }
+
+    //functie statica pentru modificarea atributului static
+    static void setAutorizatieFunctionare(bool autorizatieFunctionareNoua)
+    {
+        autorizatieFunctionare = autorizatieFunctionareNoua;
+    }
+
+    friend void AfisareDetaliiSpital(const Spital& spital);
+
 };
 
 bool Spital::autorizatieFunctionare = 1;
 
+
+
 class VaccinCovid
 {
-public:
+private:
     const int temperaturaPastrareCelsius;
+
     string numeVaccin;
     float eficacitate;
     int nrDoze;
     bool necesitaRefrigerare;
-
     int nrCentreVaccinare;
     int* stocVaccinInCentreleDeVaccinare;
 
     static string numeAfectiune;
+public:
+
 
     // Constructor cu toti parametrii
     VaccinCovid(int temperaturaPastrareCelsius, string numeVaccin, float eficacitate, int nrDoze, bool necesitaRefrigerare, int nrCentreVaccinare, int* stocVaccinInCentreleDeVaccinare) :temperaturaPastrareCelsius(temperaturaPastrareCelsius)
@@ -157,6 +313,123 @@ public:
         this->stocVaccinInCentreleDeVaccinare = NULL;
     }
 
+
+    //destructor
+    ~VaccinCovid()
+    {
+        if (this->stocVaccinInCentreleDeVaccinare != NULL)
+        {
+            delete[] this->stocVaccinInCentreleDeVaccinare;
+        }
+    }
+
+
+    //constructor copiere
+    VaccinCovid(const VaccinCovid& obj) :temperaturaPastrareCelsius(obj.temperaturaPastrareCelsius)
+    {
+        this->numeVaccin = obj.numeVaccin;
+        this->eficacitate = obj.eficacitate;
+        this->nrDoze = obj.nrDoze;
+        this->necesitaRefrigerare = obj.necesitaRefrigerare;
+        this->nrCentreVaccinare = obj.nrCentreVaccinare;
+        this->stocVaccinInCentreleDeVaccinare = new int[this->nrCentreVaccinare];
+        for (int i = 0; i < this->nrCentreVaccinare; i++)
+        {
+            this->stocVaccinInCentreleDeVaccinare[i] = obj.stocVaccinInCentreleDeVaccinare[i];
+        }
+    }
+
+    //operatoorul =
+    VaccinCovid& operator=(const VaccinCovid obj)
+    {
+        this->numeVaccin = obj.numeVaccin;
+        this->eficacitate = obj.eficacitate;
+        this->nrDoze = obj.nrDoze;
+        this->necesitaRefrigerare = obj.necesitaRefrigerare;
+        this->nrCentreVaccinare = obj.nrCentreVaccinare;
+        this->stocVaccinInCentreleDeVaccinare = new int[this->nrCentreVaccinare];
+        for (int i = 0; i < this->nrCentreVaccinare; i++)
+        {
+            this->stocVaccinInCentreleDeVaccinare[i] = obj.stocVaccinInCentreleDeVaccinare[i];
+        }
+        return *this;
+    }
+
+
+    //getteri
+    int getTemperaturaPastrareCelsius()
+    {
+        return this->temperaturaPastrareCelsius;
+    }
+
+    string getNumeVaccin()
+    {
+        return this->numeVaccin;
+    }
+
+    float getEficacitate()
+    {
+        return this->eficacitate;
+    }
+
+    int getNrDoze()
+    {
+        return this->nrDoze;
+    }
+
+    bool getNecesitaRefrigerare()
+    {
+        return this->necesitaRefrigerare;
+    }
+
+    int getNrCentreVaccinare()
+    {
+        return this->nrCentreVaccinare;
+    }
+
+    int* getStocVaccinInCentreleDeVaccinare()
+    {
+        return this->stocVaccinInCentreleDeVaccinare;
+    }
+
+
+    //setteri
+    void setNumeVaccin(string numeNouVaccin)
+    {
+        this->numeVaccin = numeNouVaccin;
+    }
+
+    void setEficacitate(float eficacitateNoua)
+    {
+        this->eficacitate = eficacitateNoua;
+    }
+
+    void setNrDoze(int nrDozeNoi)
+    {
+        this->nrDoze = nrDozeNoi;
+    }
+
+    void setNecesitaRefrigerare(bool necesitaRefrigerareNou)
+    {
+        this->necesitaRefrigerare = necesitaRefrigerareNou;
+    }
+
+    void setStocVaccine(int nrNouCentreVaccinare, int* stocNouVaccinInCentreleDeVaccinare)
+    {
+        if (this->stocVaccinInCentreleDeVaccinare != NULL)
+        {
+            delete[] this->stocVaccinInCentreleDeVaccinare;
+        }
+
+        this->nrCentreVaccinare = nrNouCentreVaccinare;
+        this->stocVaccinInCentreleDeVaccinare = new int[this->nrCentreVaccinare];
+        for (int i = 0; i < this->nrCentreVaccinare; i++)
+        {
+            this->stocVaccinInCentreleDeVaccinare[i] = stocNouVaccinInCentreleDeVaccinare[i];
+        }
+    }
+
+
     //metoda afisare
     void afisare()
     {
@@ -194,17 +467,30 @@ public:
             cout << "Vaccinul " << vaccin.numeVaccin << " nu necesita refrigerare." << endl;
         }
     }
-   
+
+    //functie statica pentru afisarea atributului static
+    static string getNumeAfectiune()
+    {
+        return numeAfectiune;
+    }
+
+    //functie statica pentru modificarea atributului static
+    static void setNumeAfectiune(string numeAfectiuneNoua)
+    {
+        numeAfectiune = numeAfectiuneNoua;
+    }
 };
 
 string VaccinCovid::numeAfectiune = "COVID-19";
 
 
 
+
 class Pacient
 {
-public:
+private:
     const string CNP;
+
     string numePrenume;
     int varsta;
     float greutate;
@@ -213,6 +499,7 @@ public:
     float* costuriSpitalizare;
 
     static int taxaAsigurareMedicala;
+public:
 
 
     //constructor cu toti parametrii
@@ -255,6 +542,121 @@ public:
     }
 
 
+    //destructori
+    ~Pacient()
+    {
+        if (this->costuriSpitalizare != NULL)
+        {
+            delete[] this->costuriSpitalizare;
+        }
+    }
+
+
+    //constructor copiere
+    Pacient(const Pacient& obj) :CNP(obj.CNP)
+    {
+        this->numePrenume = obj.numePrenume;
+        this->varsta = obj.varsta;
+        this->greutate = obj.greutate;
+        this->esteInternat = obj.esteInternat;
+        this->nrSpitalizari = obj.nrSpitalizari;
+        this->costuriSpitalizare = new float[this->nrSpitalizari];
+        for (int i = 0; i < this->nrSpitalizari; i++)
+        {
+            this->costuriSpitalizare[i] = obj.costuriSpitalizare[i];
+        }
+    }
+
+
+    //operatorul =
+    Pacient& operator=(const Pacient obj)
+    {
+        this->numePrenume = obj.numePrenume;
+        this->varsta = obj.varsta;
+        this->greutate = obj.greutate;
+        this->esteInternat = obj.esteInternat;
+        this->nrSpitalizari = obj.nrSpitalizari;
+        this->costuriSpitalizare = new float[this->nrSpitalizari];
+        for (int i = 0; i < this->nrSpitalizari; i++)
+        {
+            this->costuriSpitalizare[i] = obj.costuriSpitalizare[i];
+        }
+        return *this;
+    }
+
+
+    //getteri
+    string getCNp()
+    {
+        return this->CNP;
+    }
+
+    string getNumePrenume()
+    {
+        return this->numePrenume;
+    }
+
+    int getVarsta()
+    {
+        return this->varsta;
+    }
+
+    float getGreutate()
+    {
+        return this->esteInternat;
+    }
+
+    bool getEsteInternat()
+    {
+        return this->esteInternat;
+    }
+
+    int getNrSpitalizari()
+    {
+        return this->nrSpitalizari;
+    }
+
+    float* getCosturiSpitalizari()
+    {
+        return this->costuriSpitalizare;
+    }
+
+
+    //setteri
+    void setNumePrenume(string numePrenumeNou)
+    {
+        this->numePrenume = numePrenumeNou;
+    }
+
+    void setVarsta(int varstaNoua)
+    {
+        this->varsta = varstaNoua;
+    }
+
+    void setGreutate(float greutateNoua)
+    {
+        this->greutate = greutateNoua;
+    }
+
+    void setEsteInternat(bool esteInternatNou)
+    {
+        this->esteInternat = esteInternatNou;
+    }
+
+    void setSpitalizari(int nrNouSpitalizari, float* costuriNoiSpitalizari)
+    {
+        if (this->costuriSpitalizare != NULL)
+        {
+            delete[] this->costuriSpitalizare;
+        }
+        this->nrSpitalizari = nrNouSpitalizari;
+        this->costuriSpitalizare = new float[this->nrSpitalizari];
+        for (int i = 0; i < this->nrSpitalizari; i++)
+        {
+            this->costuriSpitalizare[i] = costuriNoiSpitalizari[i];
+        }
+    }
+
 
     //metoda afisare
     void afisare()
@@ -280,7 +682,7 @@ public:
         }
         cout << endl;
     }
-
+    
     //functie statica care afiseaza daca un pacient a platit taxa de asigurare sau nu
     static void verificaTaxaAsigurare(Pacient pacient)
     {
@@ -293,51 +695,383 @@ public:
             cout << "Pacientul " << pacient.numePrenume << " nu a platit taxa de asigurare medicala." << endl;
         }
     }
-    
-};
 
+    //functie statica pentru afisarea atributului static
+    static int getTaxaAsigurareMedicala()
+    {
+        return taxaAsigurareMedicala;
+    }
+
+    //functie statica pentru modificarea atributului static
+    static void setTaxaAsigurareMedicala(int taxaAsigurareMedicalaNoua)
+    {
+        taxaAsigurareMedicala = taxaAsigurareMedicalaNoua;
+    }
+
+
+    friend void AfisareDetaliiPacient(const Pacient& pacient);
+};
 
 int Pacient::taxaAsigurareMedicala = 1800;
 
+void AfisareDetaliiSpital(const Spital& spital)
+{
+    cout << "Detalii despre spital:" << endl;
+    cout << "Nume spital: " << spital.denumireSpital << endl;
+    cout << "Oras spital: " << spital.orasSpital << endl;
+    cout << "Suprafata in mp a spitalului: " << spital.suprafataMp << " mp" << endl;
+    cout << "Numarul de medici din spital: " << spital.nrMedici << endl;
+    cout << "Numele medicilor din spital:";
+    for (int i = 0; i < spital.nrMedici; i++)
+    {
+        cout << " " << spital.numeMedici[i];
+    }
+    cout << endl;
+    cout << "Exista pacienti la ATI? " << (spital.existaPacientiLaAti ? "DA" : "NU") << endl;
+}
+
+
+void AfisareDetaliiPacient(const Pacient& pacient)
+{
+    cout << "Detalii despre pacient:" << endl;
+    cout << "CNP: " << pacient.CNP << endl;
+    cout << "Nume si prenume: " << pacient.numePrenume << endl;
+    cout << "Varsta: " << pacient.varsta << " ani" << endl;
+    cout << "Greutate: " << pacient.greutate << " kg" << endl;
+    cout << "Este internat? " << (pacient.esteInternat ? "DA" : "NU") << endl;
+    cout << "Numar spitalizari: " << pacient.nrSpitalizari << endl;
+    cout << "Costurile spitalizarii:";
+    for (int i = 0; i < pacient.nrSpitalizari; i++)
+    {
+        cout << " " << pacient.costuriSpitalizare[i] << " RON";
+    }
+    cout << endl;
+}
 
 void main()
 {
     //Clasa Spital:
 
+    cout << "Toate spitalele au autorizatie de functionare?:";
+    if (Spital::getAutorizatieFunctionare() == 1)
+    {
+        cout << "DA!" << endl;
+    }
+    else
+    {
+        cout << "NU!" << endl;
+    }
+
+
     string nume[] = { "Matei", "Vasilescu", "Ciolacu", "Marin", "Diaconu" };
     Spital s1(1975, "MarieCurie", "Bucuresti", 150.7, 5, nume, 0);
+    cout << "An constructie s1: " << s1.getAnConstructie() << endl;
+    cout << "Denumire spital s1: " << s1.getDenumireSpital() << endl;
+    cout << "Oras spital s1: " << s1.getOrasSpital() << endl;
+    cout << "Suprafata m^2 s1: " << s1.getSuprafataMp() << endl;
+    cout << "Numar medici s1: " << s1.getNrMedici() << endl;
+    cout << "Numele medicilor s1: ";
+    for (int i = 0; i < s1.getNrMedici(); i++)
+    {
+        cout << s1.getNumeMedici()[i] << " ; ";
+    }
+    cout << endl;
+    cout << "Exista pacienti la ATI s1: ";
+    if (s1.getExistaPacientiLaAti() == 1)
+    {
+        cout << "DA!" << endl;
+    }
+    else
+    {
+        cout << "NU!" << endl;
+    }
+    cout << endl << endl;
 
 
     Spital s2;
+    cout << "An constructie s2: " << s2.getAnConstructie() << endl;
+    cout << "Denumire spital s2: " << s2.getDenumireSpital() << endl;
+    cout << "Oras spital s2: " << s2.getOrasSpital() << endl;
+    cout << "Suprafata m^2 s2: " << s2.getSuprafataMp() << endl;
+    cout << "Numar medici s2: " << s2.getNrMedici() << endl;
+    cout << "Numele medicilor s2: ";
+    for (int i = 0; i < s2.getNrMedici(); i++)
+    {
+        cout << s2.getNumeMedici()[i] << " ; ";
+    }
+    cout << endl;
+    cout << "Exista pacienti la ATI s2: ";
+    if (s2.getExistaPacientiLaAti() == 1)
+    {
+        cout << "DA!" << endl;
+    }
+    else
+    {
+        cout << "NU!" << endl;
+    }
+    cout << endl << endl;
+
 
     Spital s3("SfantaMaria", 305.5);
+    cout << "An constructie s3: " << s3.getAnConstructie() << endl;
+    cout << "Denumire spital s3: " << s3.getDenumireSpital() << endl;
+    cout << "Oras spital s3: " << s3.getOrasSpital() << endl;
+    cout << "Suprafata m^2 s3: " << s3.getSuprafataMp() << endl;
+    cout << "Numar medici s3: " << s3.getNrMedici() << endl;
+    cout << "Numele medicilor s3: ";
+    for (int i = 0; i < s3.getNrMedici(); i++)
+    {
+        cout << s3.getNumeMedici()[i] << " ; ";
+    }
+    cout << endl;
+    cout << "Exista pacienti la ATI s3: ";
+    if (s3.getExistaPacientiLaAti() == 1)
+    {
+        cout << "DA!" << endl;
+    }
+    else
+    {
+        cout << "NU!" << endl;
+    }
+    cout << endl << endl << endl;
+
+
+
 
     cout << "Spitalul s1: " << endl;
     s1.afisare();
     Spital::AfisareAutorizatieFunctionare(s1);
+    s1.setAutorizatieFunctionare;
     cout << endl << endl;
 
     cout << "Spitalul s2: " << endl;
     s2.afisare();
     Spital::AfisareAutorizatieFunctionare(s2);
+    s2.setAutorizatieFunctionare;
     cout << endl << endl;
 
     cout << "Spitalul s3: " << endl;
     s3.afisare();
     Spital::AfisareAutorizatieFunctionare(s3);
+    s3.setAutorizatieFunctionare;
     cout << endl << endl;
 
 
+    cout << "Spitalul s2 inainte de a fi modificat pe baza setterilor: " << endl;
+    s2.afisare();
+    cout << endl << endl;
+
+    s2.setDenumireSpital("Obregia");
+    s2.setOrasSpital("Bucuresti");
+    s2.setSuprafataMp(499.3);
+    string nume1[] = { "Roxana", "Gheorghe", "Marin", "Dragomir" };
+    s2.setMedici(4, nume1);
+    s2.setExistaPacientiLaAti(1);
+
+    cout << "Spitalul s2 dupa ce a fost modificat pe baza setterilor: " << endl;
+    s2.afisare();
+    cout << endl << endl << endl << endl;
+
+    cout << "!!!!!!!!!!!!!!!!!!!!!!!!! APELUL CONSTRUCTORULUI DE COPIERE !!!!!!!!!!!!!!!!!!!!!" << endl;
+    Spital s4(s1);
+    cout << "Obiectul v1 sablon (care deja exista): " << endl;
+    cout << "An constructie s1: " << s1.getAnConstructie() << endl;
+    cout << "Denumire spital s1: " << s1.getDenumireSpital() << endl;
+    cout << "Oras spital s1: " << s1.getOrasSpital() << endl;
+    cout << "Suprafata m^2 s1: " << s1.getSuprafataMp() << endl;
+    cout << "Numar medici s1: " << s1.getNrMedici() << endl;
+    cout << "Numele medicilor s1: ";
+    for (int i = 0; i < s1.getNrMedici(); i++)
+    {
+        cout << s1.getNumeMedici()[i] << " ; ";
+    }
+    cout << endl;
+    cout << "Exista pacienti la ATI s1: ";
+    if (s1.getExistaPacientiLaAti() == 1)
+    {
+        cout << "DA!" << endl;
+    }
+    else
+    {
+        cout << "NU!" << endl;
+    }
+    cout << endl << endl;
+
+    cout << "Obiectul nou s4:" << endl;
+    cout << "An constructie s4: " << s4.getAnConstructie() << endl;
+    cout << "Denumire spital s4: " << s4.getDenumireSpital() << endl;
+    cout << "Oras spital s4: " << s4.getOrasSpital() << endl;
+    cout << "Suprafata m^2 s4: " << s4.getSuprafataMp() << endl;
+    cout << "Numar medici s4: " << s4.getNrMedici() << endl;
+    cout << "Numele medicilor s4: ";
+    for (int i = 0; i < s1.getNrMedici(); i++)
+    {
+        cout << s4.getNumeMedici()[i] << " ; ";
+    }
+    cout << endl;
+    cout << "Exista pacienti la ATI s1: ";
+    if (s1.getExistaPacientiLaAti() == 1)
+    {
+        cout << "DA!" << endl;
+    }
+    else
+    {
+        cout << "NU!" << endl;
+    }
     cout << endl << endl << endl << endl << endl << endl;
 
-    //Clasa Vaccin:
+    cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! APELUL OPERATORULUI = !!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+    cout << "Obiectul s3 inainte de modificari:" << endl;
+    cout << "An constructie s3: " << s3.getAnConstructie() << endl;
+    cout << "Denumire spital s3: " << s3.getDenumireSpital() << endl;
+    cout << "Oras spital s3: " << s3.getOrasSpital() << endl;
+    cout << "Suprafata m^2 s3: " << s3.getSuprafataMp() << endl;
+    cout << "Numar medici s3: " << s3.getNrMedici() << endl;
+    cout << "Numele medicilor s3: ";
+    for (int i = 0; i < s3.getNrMedici(); i++)
+    {
+        cout << s3.getNumeMedici()[i] << " ; ";
+    }
+    cout << endl;
+    cout << "Exista pacienti la ATI s3: ";
+    if (s3.getExistaPacientiLaAti() == 1)
+    {
+        cout << "DA!" << endl;
+    }
+    else
+    {
+        cout << "NU!" << endl;
+    }
+    cout << endl << endl << endl;
+
+    s3 = s1;
+    cout << "Obiectul sablon s1:" << endl;
+    cout << "An constructie s1: " << s1.getAnConstructie() << endl;
+    cout << "Denumire spital s1: " << s1.getDenumireSpital() << endl;
+    cout << "Oras spital s1: " << s1.getOrasSpital() << endl;
+    cout << "Suprafata m^2 s1: " << s1.getSuprafataMp() << endl;
+    cout << "Numar medici s1: " << s1.getNrMedici() << endl;
+    cout << "Numele medicilor s1: ";
+    for (int i = 0; i < s1.getNrMedici(); i++)
+    {
+        cout << s1.getNumeMedici()[i] << " ; ";
+    }
+    cout << endl;
+    cout << "Exista pacienti la ATI s1: ";
+    if (s1.getExistaPacientiLaAti() == 1)
+    {
+        cout << "DA!" << endl;
+    }
+    else
+    {
+        cout << "NU!" << endl;
+    }
+    cout << endl << endl << endl;
+    cout << "Obiectul s3 dupa modificari:";
+    cout << "An constructie s1: " << s1.getAnConstructie() << endl;
+    cout << "Denumire spital s1: " << s1.getDenumireSpital() << endl;
+    cout << "Oras spital s1: " << s1.getOrasSpital() << endl;
+    cout << "Suprafata m^2 s1: " << s1.getSuprafataMp() << endl;
+    cout << "Numar medici s1: " << s1.getNrMedici() << endl;
+    cout << "Numele medicilor s1: ";
+    for (int i = 0; i < s1.getNrMedici(); i++)
+    {
+        cout << s1.getNumeMedici()[i] << " ; ";
+    }
+    cout << endl;
+    cout << "Exista pacienti la ATI s1: ";
+    if (s1.getExistaPacientiLaAti() == 1)
+    {
+        cout << "DA!" << endl;
+    }
+    else
+    {
+        cout << "NU!" << endl;
+    }
+
+
+
+    cout << endl << endl << endl << endl << endl << endl << endl;
+
+
+
+
+    //Clasa VaccinCovid
+
+    cout << "Numele afectiunii pentru care se foloseste vaccinul este: " << VaccinCovid::getNumeAfectiune() << endl;
+
 
     int stoc[] = { 150,70,90,100,40,12 };
     VaccinCovid v1(0, "AstraZeneca", 0.7, 2, 1, 6, stoc);
+    cout << "Temperatura de pastrare in grade celsius a vaccinului v1: " << v1.getTemperaturaPastrareCelsius() << endl;
+    cout << "Nume vaccin v1: " << v1.getNumeVaccin() << endl;
+    cout << "Eficacitate vaccin v1: " << v1.getEficacitate() << endl;
+    cout << "Numar doze vaccin v1: " << v1.getNrDoze() << endl;
+    cout << "Necesita refrigerare vaccinul v1: ";
+    if (v1.getNecesitaRefrigerare() == 1)
+    {
+        cout << "DA!" << endl;
+    }
+    else
+    {
+        cout << "NU!" << endl;
+    }
+    cout << "Nr de centre de vaccinare in care se regaseste vaccinul v1: " << v1.getNrCentreVaccinare() << endl;
+    cout << "Stocul existent in centrele de vaccinare pentru vaccinul v1: ";
+    for (int i = 0; i < v1.getNrCentreVaccinare(); i++)
+    {
+        cout << v1.getStocVaccinInCentreleDeVaccinare()[i] << " ; ";
+    }
+    cout << endl << endl;
+
 
     VaccinCovid v2(0.65, 1, 1);
+    cout << "Temperatura de pastrare in grade celsius a vaccinului v2: " << v2.getTemperaturaPastrareCelsius() << endl;
+    cout << "Nume vaccin v2: " << v2.getNumeVaccin() << endl;
+    cout << "Eficacitate vaccin v2: " << v2.getEficacitate() << endl;
+    cout << "Numar doze vaccin v2: " << v2.getNrDoze() << endl;
+    cout << "Necesita refrigerare vaccinul v2: ";
+    if (v2.getNecesitaRefrigerare() == 1)
+    {
+        cout << "DA!" << endl;
+    }
+    else
+    {
+        cout << "NU!" << endl;
+    }
+    cout << "Nr de centre de vaccinare in care se regaseste vaccinul v2: " << v2.getNrCentreVaccinare() << endl;
+    cout << "Stocul existent in centrele de vaccinare pentru vaccinul v2: ";
+    for (int i = 0; i < v2.getNrCentreVaccinare(); i++)
+    {
+        cout << v2.getStocVaccinInCentreleDeVaccinare()[i] << " ; ";
+    }
+    cout << endl << endl;
+
 
     VaccinCovid v3;
+    cout << "Temperatura de pastrare in grade celsius a vaccinului v3: " << v3.getTemperaturaPastrareCelsius() << endl;
+    cout << "Nume vaccin v3: " << v3.getNumeVaccin() << endl;
+    cout << "Eficacitate vaccin v3: " << v3.getEficacitate() << endl;
+    cout << "Numar doze vaccin v3: " << v3.getNrDoze() << endl;
+    cout << "Necesita refrigerare vaccinul v3: ";
+    if (v3.getNecesitaRefrigerare() == 1)
+    {
+        cout << "DA!" << endl;
+    }
+    else
+    {
+        cout << "NU!" << endl;
+    }
+    cout << "Nr de centre de vaccinare in care se regaseste vaccinul v3: " << v3.getNrCentreVaccinare() << endl;
+    cout << "Stocul existent in centrele de vaccinare pentru vaccinul v3: ";
+    for (int i = 0; i < v3.getNrCentreVaccinare(); i++)
+    {
+        cout << v3.getStocVaccinInCentreleDeVaccinare()[i] << " ; ";
+    }
+    cout << endl << endl;
+    VaccinCovid vaccinuri[] = { v1, v2, v3 };
+    int numarVaccinuri = 3;
+    cout << endl << endl;
 
 
     cout << "Vaccinul v1: " << endl;
@@ -353,20 +1087,217 @@ void main()
     cout << "Vaccinul v3: " << endl;
     v3.afisare();
     VaccinCovid::verificaNecesitateRefrigerare(v3);
+    v3.setNumeAfectiune;
+    cout << endl << endl;
+    cout << endl << endl << endl;
+
+
+    cout << "Vaccinul v3 inainte de a fi modificat pe baza setterilor: " << endl;
+    v3.afisare();
     cout << endl << endl;
 
+    v3.setNumeVaccin("Pfizer");
+    v3.setNrDoze(3);
+    v3.setEficacitate(0.9);
+    v3.setNecesitaRefrigerare(1);
+    int stoc1[] = { 240,900,356 };
+    v3.setStocVaccine(3, stoc1);
+
+    cout << "Vaccinul v3 dupa ce a fost modificat pe baza setterilor: " << endl;
+    v3.afisare();
+    cout << endl << endl << endl << endl;
+
+    cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!! APELUL CONSTRUCTORULUI DE COPIERE !!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+    VaccinCovid v4(v1);
+
+    cout << "Obiectul v1 sablon (care deja exista):";
+    cout << "Temperatura de pastrare in grade celsius a vaccinului v1: " << v1.getTemperaturaPastrareCelsius() << endl;
+    cout << "Nume vaccin v1: " << v1.getNumeVaccin() << endl;
+    cout << "Eficacitate vaccin v1: " << v1.getEficacitate() << endl;
+    cout << "Numar doze vaccin v1: " << v1.getNrDoze() << endl;
+    cout << "Necesita refrigerare vaccinul v1: ";
+    if (v1.getNecesitaRefrigerare() == 1)
+    {
+        cout << "DA!" << endl;
+    }
+    else
+    {
+        cout << "NU!" << endl;
+    }
+    cout << "Nr de centre de vaccinare in care se regaseste vaccinul v1: " << v1.getNrCentreVaccinare() << endl;
+    cout << "Stocul existent in centrele de vaccinare pentru vaccinul v1: ";
+    for (int i = 0; i < v1.getNrCentreVaccinare(); i++)
+    {
+        cout << v1.getStocVaccinInCentreleDeVaccinare()[i] << " ; ";
+    }
+    cout << endl << endl;
+
+    cout << "Obiectul nou v4:" << endl;
+    cout << "Temperatura de pastrare in grade celsius a vaccinului v4: " << v4.getTemperaturaPastrareCelsius() << endl;
+    cout << "Nume vaccin v4: " << v4.getNumeVaccin() << endl;
+    cout << "Eficacitate vaccin v4: " << v4.getEficacitate() << endl;
+    cout << "Numar doze vaccin v4: " << v4.getNrDoze() << endl;
+    cout << "Necesita refrigerare vaccinul v4: ";
+    if (v1.getNecesitaRefrigerare() == 1)
+    {
+        cout << "DA!" << endl;
+    }
+    else
+    {
+        cout << "NU!" << endl;
+    }
+    cout << "Nr de centre de vaccinare in care se regaseste vaccinul v4: " << v4.getNrCentreVaccinare() << endl;
+    cout << "Stocul existent in centrele de vaccinare pentru vaccinul v4: ";
+    for (int i = 0; i < v4.getNrCentreVaccinare(); i++)
+    {
+        cout << v4.getStocVaccinInCentreleDeVaccinare()[i] << " ; ";
+    }
+    cout << endl << endl << endl;
+    cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! APELUL OPERATORULUI = !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+    cout << "Obiectul v2 inainte de modificari:" << endl;
+    cout << "Temperatura de pastrare in grade celsius a vaccinului v2: " << v2.getTemperaturaPastrareCelsius() << endl;
+    cout << "Nume vaccin v2: " << v2.getNumeVaccin() << endl;
+    cout << "Eficacitate vaccin v2: " << v2.getEficacitate() << endl;
+    cout << "Numar doze vaccin v2: " << v2.getNrDoze() << endl;
+    cout << "Necesita refrigerare vaccinul v2: ";
+    if (v2.getNecesitaRefrigerare() == 1)
+    {
+        cout << "DA!" << endl;
+    }
+    else
+    {
+        cout << "NU!" << endl;
+    }
+    cout << "Nr de centre de vaccinare in care se regaseste vaccinul v2: " << v2.getNrCentreVaccinare() << endl;
+    cout << "Stocul existent in centrele de vaccinare pentru vaccinul v2: ";
+    for (int i = 0; i < v2.getNrCentreVaccinare(); i++)
+    {
+        cout << v2.getStocVaccinInCentreleDeVaccinare()[i] << " ; ";
+    }
+    cout << endl << endl << endl;
+
+    v2 = v1;
+
+    cout << "Obiectul sablon v1:" << endl;
+    cout << "Temperatura de pastrare in grade celsius a vaccinului v1: " << v1.getTemperaturaPastrareCelsius() << endl;
+    cout << "Nume vaccin v1: " << v1.getNumeVaccin() << endl;
+    cout << "Eficacitate vaccin v1: " << v1.getEficacitate() << endl;
+    cout << "Numar doze vaccin v1: " << v1.getNrDoze() << endl;
+    cout << "Necesita refrigerare vaccinul v1: ";
+    if (v1.getNecesitaRefrigerare() == 1)
+    {
+        cout << "DA!" << endl;
+    }
+    else
+    {
+        cout << "NU!" << endl;
+    }
+    cout << "Nr de centre de vaccinare in care se regaseste vaccinul v1: " << v1.getNrCentreVaccinare() << endl;
+    cout << "Stocul existent in centrele de vaccinare pentru vaccinul v1: ";
+    for (int i = 0; i < v1.getNrCentreVaccinare(); i++)
+    {
+        cout << v1.getStocVaccinInCentreleDeVaccinare()[i] << " ; ";
+    }
+    cout << endl << endl << endl;
+
+    cout << "Obiectul v2 dupa modificari:" << endl;
+    cout << "Temperatura de pastrare in grade celsius a vaccinului v2: " << v2.getTemperaturaPastrareCelsius() << endl;
+    cout << "Nume vaccin v2: " << v2.getNumeVaccin() << endl;
+    cout << "Eficacitate vaccin v2: " << v2.getEficacitate() << endl;
+    cout << "Numar doze vaccin v2: " << v2.getNrDoze() << endl;
+    cout << "Necesita refrigerare vaccinul v2: ";
+    if (v2.getNecesitaRefrigerare() == 1)
+    {
+        cout << "DA!" << endl;
+    }
+    else
+    {
+        cout << "NU!" << endl;
+    }
+    cout << "Nr de centre de vaccinare in care se regaseste vaccinul v2: " << v2.getNrCentreVaccinare() << endl;
+    cout << "Stocul existent in centrele de vaccinare pentru vaccinul v2: ";
+    for (int i = 0; i < v2.getNrCentreVaccinare(); i++)
+    {
+        cout << v2.getStocVaccinInCentreleDeVaccinare()[i] << " ; ";
+    }
 
 
     cout << endl << endl << endl << endl << endl << endl;
 
     //Clasa Pacient:
 
+    cout << "Taxa de asigurare medicala: " << Pacient::getTaxaAsigurareMedicala() << endl;
+
+
     float spitalizari[] = { 1400.9,560.9,3500.99,300.2 };;
     Pacient p1("2781026483927", "JuncuMarina", 45, 78.5, 1, 4, spitalizari);
+    cout << "CNP-ul pacientului p1: " << p1.getCNp() << endl;
+    cout << "Nume prenume pacient p1: " << p1.getNumePrenume() << endl;
+    cout << "Varsta pacientului p1: " << p1.getVarsta() << endl;
+    cout << "Greutatea pacientului p1: " << p1.getGreutate() << endl;
+    cout << "Pacientul p1 este internat?:  ";
+    if (p1.getEsteInternat() == 1)
+    {
+        cout << "DA!" << endl;
+    }
+    else
+    {
+        cout << "NU!" << endl;
+    }
+    cout << "Nr de spitalizari ale pacientului p1: " << p1.getNrSpitalizari() << endl;
+    cout << "Costul spitalizarilor pacientului p1:";
+    for (int i = 0; i < p1.getNrSpitalizari(); i++)
+    {
+        cout << p1.getCosturiSpitalizari()[i] << " ; ";
+    }
+    cout << endl << endl;
+
 
     Pacient p2("Ghenade Mihai");
+    cout << "CNP-ul pacientului p2: " << p2.getCNp() << endl;
+    cout << "Nume prenume pacient p2: " << p2.getNumePrenume() << endl;
+    cout << "Varsta pacientului p2: " << p2.getVarsta() << endl;
+    cout << "Greutatea pacientului p2: " << p2.getGreutate() << endl;
+    cout << "Pacientul p2 este internat?:  ";
+    if (p2.getEsteInternat() == 1)
+    {
+        cout << "DA!" << endl;
+    }
+    else
+    {
+        cout << "NU!" << endl;
+    }
+    cout << "Nr de spitalizari ale pacientului p2: " << p2.getNrSpitalizari() << endl;
+    cout << "Costul spitalizarilor pacientului p2:";
+    for (int i = 0; i < p2.getNrSpitalizari(); i++)
+    {
+        cout << p2.getCosturiSpitalizari()[i] << " ; ";
+    }
+    cout << endl << endl;
+
 
     Pacient p3;
+    cout << "CNP-ul pacientului p3: " << p3.getCNp() << endl;
+    cout << "Nume prenume pacient p3: " << p3.getNumePrenume() << endl;
+    cout << "Varsta pacientului p3: " << p3.getVarsta() << endl;
+    cout << "Greutatea pacientului p3: " << p3.getGreutate() << endl;
+    cout << "Pacientul p3 este internat?:  ";
+    if (p3.getEsteInternat() == 1)
+    {
+        cout << "DA!" << endl;
+    }
+    else
+    {
+        cout << "NU!" << endl;
+    }
+    cout << "Nr de spitalizari ale pacientului p3: " << p3.getNrSpitalizari() << endl;
+    cout << "Costul spitalizarilor pacientului p3:";
+    for (int i = 0; i < p3.getNrSpitalizari(); i++)
+    {
+        cout << p3.getCosturiSpitalizari()[i] << " ; ";
+    }
+    cout << endl << endl;
+
 
     cout << "Pacientul p1: " << endl;
     p1.afisare();
@@ -376,11 +1307,146 @@ void main()
     cout << "Pacientul p2: " << endl;
     p2.afisare();
     Pacient::verificaTaxaAsigurare(p2);
-     cout << endl << endl;
+    cout << endl << endl;
 
     cout << "Pacientul p3: " << endl;
     p3.afisare();
     Pacient::verificaTaxaAsigurare(p3);
-    cout << endl << endl;
+    cout << endl << endl << endl << endl;
 
-}
+
+    cout << "Pacientul p3 inainte de a fi modificat pe baza setterilor: " << endl;
+    p3.afisare();
+
+    p3.setNumePrenume("IonGheorghe");
+    p3.setGreutate(90.8);
+    p3.setVarsta(55);
+    float spitalizari1[] = { 3300.8,1200.9 };
+    p3.setSpitalizari(2, spitalizari1);
+    p3.setEsteInternat(0);
+
+    cout << "Pacientul p3 dupa ce a fost modificat pe baza setterilor: " << endl;
+    p3.afisare();
+
+    cout << endl << endl << endl << endl;
+
+    cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!APELUL CONSTRUCTORULUI DE COPEIERE!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+    Pacient p4(p1);
+    cout << "Obiectul sablon p1 care deja exista:" << endl;
+    cout << "CNP-ul pacientului p1: " << p1.getCNp() << endl;
+    cout << "Nume prenume pacient p1: " << p1.getNumePrenume() << endl;
+    cout << "Varsta pacientului p1: " << p1.getVarsta() << endl;
+    cout << "Greutatea pacientului p1: " << p1.getGreutate() << endl;
+    cout << "Pacientul p1 este internat?:  ";
+    if (p1.getEsteInternat() == 1)
+    {
+        cout << "DA!" << endl;
+    }
+    else
+    {
+        cout << "NU!" << endl;
+    }
+    cout << "Nr de spitalizari ale pacientului p1: " << p1.getNrSpitalizari() << endl;
+    cout << "Costul spitalizarilor pacientului p1:";
+    for (int i = 0; i < p1.getNrSpitalizari(); i++)
+    {
+        cout << p1.getCosturiSpitalizari()[i] << " ; ";
+    }
+    cout << endl << endl << endl;
+
+    cout << "Obiectul nou p4:" << endl;
+    cout << "CNP-ul pacientului p4: " << p4.getCNp() << endl;
+    cout << "Nume prenume pacient p4: " << p4.getNumePrenume() << endl;
+    cout << "Varsta pacientului p4: " << p4.getVarsta() << endl;
+    cout << "Greutatea pacientului p4: " << p4.getGreutate() << endl;
+    cout << "Pacientul p4 este internat?:  ";
+    if (p4.getEsteInternat() == 1)
+    {
+        cout << "DA!" << endl;
+    }
+    else
+    {
+        cout << "NU!" << endl;
+    }
+    cout << "Nr de spitalizari ale pacientului p4: " << p4.getNrSpitalizari() << endl;
+    cout << "Costul spitalizarilor pacientului p4:";
+    for (int i = 0; i < p4.getNrSpitalizari(); i++)
+    {
+        cout << p4.getCosturiSpitalizari()[i] << " ; ";
+    }
+    cout << endl << endl << endl;
+
+    cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! APELUL OPERATORULUI = !!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+    cout << "Obiectul p2 inainte de modificari:" << endl;
+    cout << "CNP-ul pacientului p2: " << p2.getCNp() << endl;
+    cout << "Nume prenume pacient p2: " << p2.getNumePrenume() << endl;
+    cout << "Varsta pacientului p2: " << p2.getVarsta() << endl;
+    cout << "Greutatea pacientului p2: " << p2.getGreutate() << endl;
+    cout << "Pacientul p2 este internat?:  ";
+    if (p2.getEsteInternat() == 1)
+    {
+        cout << "DA!" << endl;
+    }
+    else
+    {
+        cout << "NU!" << endl;
+    }
+    cout << "Nr de spitalizari ale pacientului p2: " << p2.getNrSpitalizari() << endl;
+    cout << "Costul spitalizarilor pacientului p2:";
+    for (int i = 0; i < p2.getNrSpitalizari(); i++)
+    {
+        cout << p2.getCosturiSpitalizari()[i] << " ; ";
+    }
+    cout << endl << endl << endl;
+    p2 = p1;
+
+    cout << "Obiectul sablon p1:" << endl;
+    cout << "CNP-ul pacientului p1: " << p1.getCNp() << endl;
+    cout << "Nume prenume pacient p1: " << p1.getNumePrenume() << endl;
+    cout << "Varsta pacientului p1: " << p1.getVarsta() << endl;
+    cout << "Greutatea pacientului p1: " << p1.getGreutate() << endl;
+    cout << "Pacientul p1 este internat?:  ";
+    if (p1.getEsteInternat() == 1)
+    {
+        cout << "DA!" << endl;
+    }
+    else
+    {
+        cout << "NU!" << endl;
+    }
+    cout << "Nr de spitalizari ale pacientului p1: " << p1.getNrSpitalizari() << endl;
+    cout << "Costul spitalizarilor pacientului p1:";
+    for (int i = 0; i < p1.getNrSpitalizari(); i++)
+    {
+        cout << p1.getCosturiSpitalizari()[i] << " ; ";
+    }
+    cout << endl << endl << endl;
+
+    cout << "Obiectul p2 dupa modificari:" << endl;
+    cout << "Obiectul p2 inainte de modificari:" << endl;
+    cout << "CNP-ul pacientului p2: " << p2.getCNp() << endl;
+    cout << "Nume prenume pacient p2: " << p2.getNumePrenume() << endl;
+    cout << "Varsta pacientului p2: " << p2.getVarsta() << endl;
+    cout << "Greutatea pacientului p2: " << p2.getGreutate() << endl;
+    cout << "Pacientul p2 este internat?:  ";
+    if (p2.getEsteInternat() == 1)
+    {
+        cout << "DA!" << endl;
+    }
+    else
+    {
+        cout << "NU!" << endl;
+    }
+    cout << "Nr de spitalizari ale pacientului p2: " << p2.getNrSpitalizari() << endl;
+    cout << "Costul spitalizarilor pacientului p2:";
+    for (int i = 0; i < p2.getNrSpitalizari(); i++)
+    {
+        cout << p2.getCosturiSpitalizari()[i] << " ; ";
+    }
+
+    cout << endl << endl << endl << endl;
+
+    AfisareDetaliiSpital(s1);
+    AfisareDetaliiPacient(p1);
+
+} 
