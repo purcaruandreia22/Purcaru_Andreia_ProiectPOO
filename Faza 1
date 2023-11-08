@@ -2,6 +2,11 @@
 //Domeniul ales: PAnDemie
 //Clasele alese: Spital, Vaccin, Pacient
 
+
+
+//!!!! Am mai adaugat inca odata faza a 3-a deoarece am omis sa fac postincrementarea operatorului ++ si am schimbat variabila de tip int a operatorului.
+
+
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <string>
@@ -397,13 +402,22 @@ public:
         return *this;
     }
 
-    //operatorul de autoincrementare ++ (preincrementare)
+    //operatorul de autoincrementare ++ 
     //CERINTA: SA SE ADAUGE INCA UN CENTRU DE VACCINARE
+    //(preincrementare)
     VaccinCovid& operator ++()
     {
-        this->nrCentreVaccinare++;
+        this->nrDoze++;
         return *this;
     }
+    //(postincrementare)
+    VaccinCovid operator++(int)
+    {
+        VaccinCovid copie1 = *this;
+        this->nrDoze++;
+        return copie1;
+    }
+
 
     //operatorul functie ()
     // CERINTA: CALCULATI NUMARUL TOTAL DE STOCURI CARE DEPASESC PREGUL DE 70
@@ -1390,13 +1404,20 @@ void main()
     cout << endl << endl << endl;
 
     cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! SUPRAINCARCAREA OPERATORUL ++ (PREINCREMENTARE) !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
-    cout << "Numarul centrelor de vaccinare din v1:" << v1.getNrCentreVaccinare() << endl;
-    cout << "Numarul centrelor de vaccinare din v2:" << v2.getNrCentreVaccinare() << endl;
+    cout << "Numarul de doze al vaccinului v1:" << v1.getNrDoze() << endl;
+    cout << "Numarul de doze al vaccinului v2:" << v2.getNrDoze() << endl;
     v1 = ++v2;
-    cout << "Numarul centrelor de vaccinare din v1:" << v1.getNrCentreVaccinare() << endl;
-    cout << "Numarul centrelor de vaccinare din v2:" << v2.getNrCentreVaccinare() << endl;
+    cout << "Numarul de doze al vaccinului v1:" << v1.getNrDoze() << endl;
+    cout << "Numarul de doze al vaccinului v2:" << v2.getNrDoze() << endl;
 
     cout << endl << endl << endl;
+
+    cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! OPERATORUL ++ (POSTINCREMENTARE) !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+    cout << "Numarul de doze al vaccinului v2:" << v2.getNrDoze() << endl;
+    cout << "Numarul de doze al vaccinului v3:" << v3.getNrDoze() << endl;
+    v2 = v3++;
+    cout << "Numarul de doze al vaccinului v2:" << v2.getNrDoze() << endl;
+    cout << "Numarul de doze al vaccinului v3:" << v3.getNrDoze() << endl;
 
     cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! SUPRAINCARCAREA OPERATORULUI () !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
     cout << "Exista un numar total de " << v1(70) << " stocuri cu prag mai mare de 70 de produse." << endl;
