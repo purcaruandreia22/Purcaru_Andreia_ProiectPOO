@@ -1,4 +1,4 @@
-//Nume: Purcaru Andreia D...
+//Nume: Purcaru Andreia Daniela
 //Domeniul ales: PAnDemie
 //Clasele alese: Spital, Vaccin, Pacient
 
@@ -119,6 +119,48 @@ public:
         this->existaPacientiLaAti = obj.existaPacientiLaAti;
 
         return *this;
+    }
+
+    //operatorul <=
+    //CERINTA: COMPARAREA A DOUA SPITALE DUPA SUPRAFATA LOR
+    bool operator<=(const Spital obj)
+    {
+        if (this->suprafataMp <= obj.suprafataMp)
+        {
+            return 1;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    //operatorul logic !
+    //CERINTA: SA SE SCHIMBE VALOAREA ATRIBUTULUI BOOL A SPITALULUI S3
+    friend void operator!(Spital& obj)
+    {
+        if (obj.existaPacientiLaAti == 1)
+        {
+            obj.existaPacientiLaAti = 0;
+        }
+        else
+        {
+            obj.existaPacientiLaAti = 1;
+        }
+    }
+
+    //operatorul de indexare []
+    //CERINTA: SA SE AFISEZE NUMELE MEDICULUI DE PE POZITIA 2
+    string operator[](int pozitie)
+    {
+        if (pozitie >= 0 && pozitie < this->nrMedici)
+        {
+            return this->numeMedici[pozitie];
+        }
+        else
+        {
+            return "Pozitia nu exista!";
+        }
     }
 
 
@@ -355,6 +397,44 @@ public:
         return *this;
     }
 
+    //operatorul de autoincrementare ++ (preincrementare)
+    //CERINTA: SA SE ADAUGE INCA UN CENTRU DE VACCINARE
+    VaccinCovid& operator ++()
+    {
+        this->nrCentreVaccinare++;
+        return *this;
+    }
+
+    //operatorul functie ()
+    // CERINTA: CALCULATI NUMARUL TOTAL DE STOCURI CARE DEPASESC PREGUL DE 70
+    int operator ()(float prag)
+    {
+        int contor = 0;
+        for (int i = 0;i < this->nrCentreVaccinare;i++)
+        {
+            if (this->stocVaccinInCentreleDeVaccinare[i] > prag)
+            {
+                contor++;
+            }
+        }
+        return contor;
+    }
+
+    //operatorul <=
+    //CERINTA: COMPARATI EFICACITATILE DINTRE VACCINUL V1 SI V2
+    bool operator<=(const VaccinCovid& obj)
+    {
+        if (this->eficacitate <= obj.eficacitate)
+        {
+            return 1;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+
 
     //getteri
     int getTemperaturaPastrareCelsius()
@@ -584,6 +664,68 @@ public:
         return *this;
     }
 
+    //operatorul +=
+    //CERINTA: SA SE ADAUGE INCA UN COST DE SPITALIZARE IN VECTOR
+    Pacient& operator+=(float costuriSpitalizareNou)
+    {
+        Pacient copie(*this);
+
+        if (this->costuriSpitalizare != NULL)
+        {
+            delete[] this->costuriSpitalizare;
+        }
+
+        this->nrSpitalizari++;
+
+        this->costuriSpitalizare = new float[this->nrSpitalizari];
+
+        for (int i = 0;i < copie.nrSpitalizari;i++)
+        {
+            this->costuriSpitalizare[i] = copie.costuriSpitalizare[i];
+        }
+        this->costuriSpitalizare[this->nrSpitalizari - 1] = costuriSpitalizareNou;
+
+        return *this;
+    }
+
+    //operatorul de indexare
+    //CERINTA: AFISATI COSTUL SPITALIZARILOR CU NR 2
+    float operator[](int pozitie2)
+    {
+        if (pozitie2 >= 0 && pozitie2 < this->nrSpitalizari)
+        {
+            return this->costuriSpitalizare[pozitie2];
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    //operatorul >>
+    friend istream& operator>>(istream& i, Pacient& obj)
+    {
+        delete[] obj.costuriSpitalizare;
+        cout << "Introduceti numele pacientului: ";
+        i >> obj.numePrenume;
+        cout << "Introduceti 1 daca pacientul este internat, introduceti 0 daca pacientul nu este internat: ";
+        i >> obj.esteInternat;
+        cout << "Introduceti varsta: ";
+        i >> obj.varsta;
+        cout << "Introduceti greutatea: ";
+        i >> obj.greutate;
+        cout << "Introduceti numarul spitalizarilor: ";
+        i >> obj.nrSpitalizari;
+
+        obj.costuriSpitalizare = new float[obj.nrSpitalizari];
+        cout << "Introduceti costurile spitalizarilor: ";
+        for (int j = 0;j < obj.nrSpitalizari;j++)
+        {
+            cout << "Cost: ";
+            i >> obj.costuriSpitalizare[j];
+        }
+        return i;
+    }
 
     //getteri
     string getCNp()
@@ -682,7 +824,7 @@ public:
         }
         cout << endl;
     }
-    
+
     //functie statica care afiseaza daca un pacient a platit taxa de asigurare sau nu
     static void verificaTaxaAsigurare(Pacient pacient)
     {
@@ -993,8 +1135,33 @@ void main()
 
     cout << endl << endl << endl << endl << endl << endl << endl;
 
+    cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! SUPRAINCARCAREA OPERATORULUI <= !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+    s1 <= s3;
+    cout << "Suprafata spitalului s1:" << s1.getSuprafataMp() << endl;
+    cout << "Suprafata spitalului s3:" << s3.getSuprafataMp() << endl;
+    cout << "Suprafata spitalului s1 este <= suprafata spitalului s3? (1-ADEVARAT; 0-FALS)" << (s1 <= s3) << endl;
+    if (s1 <= s3)
+    {
+        cout << "Suprafata spitalului s1 este <= suprafata spitalului s2" << endl;
+    }
+    else
+    {
+        cout << "Suprafata spitalului s1 este >= suprafata spitalului s3" << endl;
+    }
+    cout << endl << endl << endl;
 
+    cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! SUPRAINCARCAREA OPERATORULUI [] !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+    cout << "Numele medicului cu indexul 2 din spitalul s1 este:" << s1[2] << endl;
+    cout << "Numele medicului cu indexul 2 din spitalul s1 este:" << s1[7] << endl;
 
+    cout << endl << endl << endl;
+
+    cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! SUPRAINCARCAREA OPERATORULUI DE NEGATIE !  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+    cout << "Spitalul s3 are pacienti la ATI? (1-DA! / 0-NU!)" << s3.getExistaPacientiLaAti() << endl;
+    !s3;
+    cout << "Spitalul s3 are pacienti la ATI? (1-DA! / 0-NU!)" << s3.getExistaPacientiLaAti() << endl;
+
+    cout << endl << endl << endl << endl << endl << endl;
 
     //Clasa VaccinCovid
 
@@ -1220,8 +1387,35 @@ void main()
     {
         cout << v2.getStocVaccinInCentreleDeVaccinare()[i] << " ; ";
     }
+    cout << endl << endl << endl;
 
+    cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! SUPRAINCARCAREA OPERATORUL ++ (PREINCREMENTARE) !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+    cout << "Numarul centrelor de vaccinare din v1:" << v1.getNrCentreVaccinare() << endl;
+    cout << "Numarul centrelor de vaccinare din v2:" << v2.getNrCentreVaccinare() << endl;
+    v1 = ++v2;
+    cout << "Numarul centrelor de vaccinare din v1:" << v1.getNrCentreVaccinare() << endl;
+    cout << "Numarul centrelor de vaccinare din v2:" << v2.getNrCentreVaccinare() << endl;
 
+    cout << endl << endl << endl;
+
+    cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! SUPRAINCARCAREA OPERATORULUI () !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+    cout << "Exista un numar total de " << v1(70) << " stocuri cu prag mai mare de 70 de produse." << endl;
+
+    cout << endl << endl << endl;
+
+    cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! SUPRAINCARCAREA OPERATORULUI <= !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+    cout << "Eficacitatea vaccinului v1: " << v1.getEficacitate() << endl;
+    cout << "Eficacitatea vaccinului v2: " << v2.getEficacitate() << endl;
+    cout << "Eficacitatea vaccinului v1 este <= eficacitatea vaccinului v2? (1-DA!; 0-NU!)" << (v1 <= v2) << endl;
+
+    if (v1 <= v2)
+    {
+        cout << "Eficacitatea vaccinului v1 este <= eficacitatea vaccinului v2" << endl;
+    }
+    else
+    {
+        cout << "Eficacitatea vaccinului v1 este >= eficacitatea vaccinului v2" << endl;
+    }
     cout << endl << endl << endl << endl << endl << endl;
 
     //Clasa Pacient:
@@ -1444,9 +1638,30 @@ void main()
         cout << p2.getCosturiSpitalizari()[i] << " ; ";
     }
 
-    cout << endl << endl << endl << endl;
+    cout << endl << endl << endl;
+
+    cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! SUPRAINCARCAREA OPERATORULUI += !!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+    cout << "Pacientul p3 inainde de apelul operatorului +=:" << endl;
+    p3.afisare();
+    cout << endl << endl;
+    p3 += 760.5;
+    cout << "Pacientul p3 dupa apelul operatorului +=";
+    p3.afisare();
+    cout << endl << endl << endl;
+
+    cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! SUPRAINCARCAREA OPERATORULUI [] !!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+    cout << "Costul spitalizarilor cu indexul 2 pentru pacientul p1 este: " << p1[2] << endl;
+    cout << "Costu spitalizarilor cu indexul 2 pentru pacientul p1 este: " << p1[11];
+    cout << endl << endl << endl;
+
+    cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! SUPRAINCARCAREA OPERATORULUI >> !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+    cin >> p1;
+
+
+
+    cout << endl << endl << endl << endl << endl;
 
     AfisareDetaliiSpital(s1);
     AfisareDetaliiPacient(p1);
 
-} 
+}
