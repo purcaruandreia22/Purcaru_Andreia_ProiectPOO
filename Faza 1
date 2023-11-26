@@ -802,17 +802,6 @@ public:
         }
     }
 
-    /*const string CNP;
-
-    string numePrenume;
-    int varsta;
-    float greutate;
-    bool esteInternat;
-    int nrSpitalizari;
-    float* costuriSpitalizare;
-
-    static int taxaAsigurareMedicala;*/
-
 
     //operatorul >>
     friend istream& operator>>(istream& i, Pacient& obj)
@@ -1844,6 +1833,10 @@ void main()
 
     cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! SUPRAINCARCAREA OPERATORULUI >> !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
     cin >> p1;
+    cout << endl << endl << endl;
+
+    cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! SUPRAINCARCAREA OPERATORULUI << !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+    cout << p2;
     cout << endl << endl << endl;
 
     //vector Pacienti
