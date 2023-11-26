@@ -2,11 +2,6 @@
 //Domeniul ales: PAnDemie
 //Clasele alese: Spital, Vaccin, Pacient
 
-
-
-//!!!! Am mai adaugat inca odata faza a 3-a deoarece am omis sa fac postincrementarea operatorului ++ si am schimbat variabila de tip int a operatorului.
-
-
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <string>
@@ -166,6 +161,56 @@ public:
         {
             return "Pozitia nu exista!";
         }
+    }
+
+    //operatorul >>
+    friend istream& operator>>(istream& it, Spital& o)
+    {
+        delete[] o.orasSpital;
+        delete[] o.numeMedici;
+
+        cout << "Introduceti denumirea spitalului: ";
+        it >> o.denumireSpital;
+        cout << "Introduceti suprafata magazinului: ";
+        it >> o.suprafataMp;
+        cout << "Introduceti 1 daca spitalul are pacienti la ATI, 0 daca nu are pacienti la ATI: ";
+        it >> o.existaPacientiLaAti;
+
+        cout << "Introduceti orasul din care provine spitalul: ";
+        char aux[100];
+        it >> aux;
+        o.orasSpital = new char[strlen(aux) + 1];
+        strcpy(o.orasSpital, aux);
+
+        cout << "Introduceti numarul medicilor: ";
+        it >> o.nrMedici;
+
+        o.numeMedici = new string[o.nrMedici];
+        cout << "Introduceti numele medicilor: ";
+        for (int j = 0;j < o.nrMedici;j++)
+        {
+            cout << "Nume: ";
+            it >> o.numeMedici[j];
+        }
+        return it;
+    }
+
+
+    //operatorul <<
+    friend ostream& operator<<(ostream& os, const Spital& ob)
+    {
+        os << "Denumire spital: " << ob.denumireSpital << endl;
+        os << "Are pacienti la ATI? (1-DA!/0-NU!): " << ob.existaPacientiLaAti << endl;
+        os << "Suprafata m^2: " << ob.suprafataMp << endl;
+        os << "Orasul din care provine spitalul: " << ob.orasSpital << endl;
+        os << "Numar medici: " << ob.nrMedici << endl;
+        cout << "Nume medici: " << endl;
+        for (int i = 0;i < ob.nrMedici;i++)
+        {
+            os << ob.numeMedici[i] << endl;
+        }
+        os << "Anul constructiei: " << ob.anConstructie << endl;
+        return os;
     }
 
 
@@ -448,6 +493,47 @@ public:
         }
     }
 
+    //operatorul >>
+    friend istream& operator>>(istream& ist, VaccinCovid& v)
+    {
+        delete[] v.stocVaccinInCentreleDeVaccinare;
+        cout << "Introduceti numele vaccinului: " << endl;
+        ist >> v.numeVaccin;
+        cout << "Introduceti eficacitatea vaccinului: " << endl;
+        ist >> v.eficacitate;
+        cout << "Introduceti numarul dozelor necesare: " << endl;
+        ist >> v.nrDoze;
+        cout << "Introduceti 1 daca vaccinul necesita refrigerare si 0 daca nu necesita refrigerare: " << endl;
+        ist >> v.necesitaRefrigerare;
+        cout << "Introduceti numarul centrelor de vaccinare: " << endl;
+        ist >> v.nrCentreVaccinare;
+
+        v.stocVaccinInCentreleDeVaccinare = new int[v.nrCentreVaccinare];
+        cout << "Introduceti stocul vaccinului: ";
+        for (int j = 0;j < v.nrCentreVaccinare;j++)
+        {
+            cout << "Stoc: ";
+            ist >> v.stocVaccinInCentreleDeVaccinare[j];
+        }
+        return ist;
+    }
+
+    //operatorul <<
+    friend ostream& operator<<(ostream& ost, const VaccinCovid& va)
+    {
+        ost << "Nume vaccin: " << va.numeVaccin << endl;
+        ost << "Eficacitate: " << va.eficacitate << endl;
+        ost << "Doze necesare: " << va.nrDoze << endl;
+        ost << "Necesita refrigerare? (1-DA!/0-NU!): " << endl;
+        ost << "Numarul centrelor de vaccinare: " << va.nrCentreVaccinare << endl;
+        cout << "Stoc: " << endl;
+        for (int i = 0;i < va.nrCentreVaccinare;i++)
+        {
+            ost << va.stocVaccinInCentreleDeVaccinare[i] << endl;
+        }
+        ost << "Temperatura de pastrare grade celsius: " << va.temperaturaPastrareCelsius;
+        return ost;
+    }
 
 
     //getteri
@@ -716,6 +802,18 @@ public:
         }
     }
 
+    /*const string CNP;
+
+    string numePrenume;
+    int varsta;
+    float greutate;
+    bool esteInternat;
+    int nrSpitalizari;
+    float* costuriSpitalizare;
+
+    static int taxaAsigurareMedicala;*/
+
+
     //operatorul >>
     friend istream& operator>>(istream& i, Pacient& obj)
     {
@@ -739,6 +837,23 @@ public:
             i >> obj.costuriSpitalizare[j];
         }
         return i;
+    }
+
+    //operatorul <<
+    friend ostream& operator<<(ostream& om, const Pacient& p)
+    {
+        om << "Nume pacient: " << p.numePrenume << endl;
+        om << "Pacientul este internat? (1-DA!/0-NU!): " << p.esteInternat << endl;
+        om << "Varsta: " << p.varsta << endl;
+        om << "Greutate: " << p.greutate;
+        om << "Numar spitalizari: " << p.nrSpitalizari << endl;
+        cout << "Costuri: " << endl;
+        for (int i = 0;i < p.nrSpitalizari;i++)
+        {
+            om << p.costuriSpitalizare[i] << endl;
+        }
+        om << "CNP: " << p.CNP << endl;
+        return om;
     }
 
     //getteri
@@ -1174,9 +1289,35 @@ void main()
     cout << "Spitalul s3 are pacienti la ATI? (1-DA! / 0-NU!)" << s3.getExistaPacientiLaAti() << endl;
     !s3;
     cout << "Spitalul s3 are pacienti la ATI? (1-DA! / 0-NU!)" << s3.getExistaPacientiLaAti() << endl;
+    cout << endl << endl << endl;
+   
 
+    cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! SUPRAINCARCAREA OPERATORULUI >> !!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+    cin >> s1;
+    cout << endl << endl << endl;
+
+    cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! SUPRAINCARCAREA OPERATORULUI << !!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+    cout << s3;
+    cout << endl << endl << endl;
+
+    //vector Spital
+    int nrSpitale;
+    cout << endl << "Introduceti numarul spitalelor: ";
+    cin >> nrSpitale;
+    Spital* vectorSpitale = new Spital[nrSpitale];
+    for (int i = 0;i < nrSpitale;i++)
+    {
+        cout << endl << "Informatii spitale " << i + 1 << ":" << endl;
+        cin >> vectorSpitale[i];
+    }
+    for (int i = 0;i < nrSpitale;i++)
+    {
+        cout << vectorSpitale[i] << endl;
+    }
+    delete[] vectorSpitale;
     cout << endl << endl << endl << endl << endl << endl;
-
+    
+    
     //Clasa VaccinCovid
 
     cout << "Numele afectiunii pentru care se foloseste vaccinul este: " << VaccinCovid::getNumeAfectiune() << endl;
@@ -1437,6 +1578,32 @@ void main()
     {
         cout << "Eficacitatea vaccinului v1 este >= eficacitatea vaccinului v2" << endl;
     }
+    cout << endl << endl << endl;
+
+    cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! SUPRAINCARCAREA OPERATORULUI >> !!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+    cin >> v2;
+    cout << endl << endl << endl;
+
+    cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! SUPRAINCARCAREA OPERATORULUI << !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+    cout << v1;
+    cout << endl << endl << endl;
+
+    //vector VaccinCovid
+    int nrVaccinuri;
+    cout << endl << "Introduceti numarul vaccinurilor: ";
+    cin >> nrVaccinuri;
+    VaccinCovid* vectorVaccinCovid = new VaccinCovid[nrVaccinuri];
+    for (int i = 0;i < nrVaccinuri;i++)
+    {
+        cout << "Informatii vaccinuri: " << i + 1 << ":" << endl;
+        cin >> vectorVaccinCovid[i];
+    }
+    for (int i = 0;i < nrVaccinuri;i++)
+    {
+        cout << vectorVaccinCovid[i] << endl;
+    }
+    delete[] vectorVaccinCovid;
+    
     cout << endl << endl << endl << endl << endl << endl;
 
     //Clasa Pacient:
@@ -1677,6 +1844,46 @@ void main()
 
     cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! SUPRAINCARCAREA OPERATORULUI >> !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
     cin >> p1;
+    cout << endl << endl << endl;
+
+    //vector Pacienti
+    int nrPacienti;
+    cout << "Introduceti numarul pacientilor: ";
+    cin >> nrPacienti;
+    Pacient* vectorPacienti = new Pacient[nrPacienti];
+    for (int i = 0;i < nrPacienti;i++)
+    {
+        cout << "Infomatii pacienti: " << i + 1 << ":" << endl;
+        cin >> vectorPacienti[i];
+    }
+    for (int i = 0;i < nrPacienti;i++)
+    {
+        cout << vectorPacienti[i] << endl;
+    }
+    delete[] vectorPacienti;
+
+    const int nrLinii = 2;
+    const int nrColoane = 2;
+    
+    Pacient matricePacient[nrLinii][nrColoane];
+    for (int i = 0;i < nrLinii;i++)
+    {
+        for (int j = 0;j < nrColoane;j++)
+        {
+            cout << "Informatiile pacientului [" << i + 1 << "][" << j + 1 << "]: " << endl;
+            cin >> matricePacient[i][j];
+        }
+    }
+
+    for (int i = 0;i < nrLinii;i++)
+    {
+        for (int j = 0;j < nrColoane;j++)
+        {
+            cout << "Pacientul [" << i + 1 << "][" << j + 1 << "]: " << endl;
+            cout << matricePacient[i][j] << " ";
+        }
+        cout << endl << endl;
+    }
 
 
 
@@ -1684,5 +1891,4 @@ void main()
 
     AfisareDetaliiSpital(s1);
     AfisareDetaliiPacient(p1);
-
 }
