@@ -1331,6 +1331,146 @@ void AfisareDetaliiPacient(const Pacient& pacient)
     cout << endl;
 }
 
+
+//relatia is-a
+class SpitalPrivat : public Spital
+{
+private:
+    int nrSectii;
+    string* tipuriSectii;
+
+public:
+    //constructor fara parametrii
+    SpitalPrivat() :Spital()
+    {
+        this->nrSectii = 0;
+        this->tipuriSectii = NULL;
+    }
+    //constructor cu toti parametrii
+    SpitalPrivat(int nrSectii, string* tipuriSectii, int anConstructie, string denumireSpital, const char* orasSpital, float suprafataMp, int nrMedici, string* numeMedici, bool existaPacientiLaAti)
+        : Spital(anConstructie, denumireSpital, orasSpital, suprafataMp, nrMedici, numeMedici, existaPacientiLaAti)
+    {
+        this->nrSectii = nrSectii;
+        this->tipuriSectii = new string[this->nrSectii];
+        for (int i = 0; i < this->nrSectii; i++)
+        {
+            this->tipuriSectii[i] = tipuriSectii[i];
+        }
+    }
+
+    //constructor de copiere
+    SpitalPrivat(const SpitalPrivat& spitalPrivat) :Spital(spitalPrivat)
+    {
+        this->nrSectii = spitalPrivat.nrSectii;
+        this->tipuriSectii = new string[this->nrSectii];
+        for (int i = 0;i < this->nrSectii;i++)
+        {
+            this->tipuriSectii[i] = tipuriSectii[i];
+        }
+    }
+
+    //operatorul =
+    SpitalPrivat& operator=(const SpitalPrivat& spital)
+    {
+        if (this != &spital)
+        {
+            Spital::operator<=(spital);
+            if (this->tipuriSectii != NULL)
+            {
+                delete[] this->tipuriSectii;
+            }
+            this->nrSectii = spital.nrSectii;
+            this->tipuriSectii = new string[this->nrSectii];
+            for (int i = 0;i < this->nrSectii;i++)
+            {
+                this->tipuriSectii[i] = spital.tipuriSectii[i];
+            }
+        }
+        return *this;
+
+    }
+
+    //operatorul <<
+    friend ostream& operator<<(ostream& po, SpitalPrivat& obj)
+    {
+        po << "Numar sectii: " << obj.nrSectii << endl;
+        po << "Tipuri sectii: " << endl;
+        for (int i = 0;i < obj.nrSectii;i++)
+        {
+            po << obj.tipuriSectii[i];
+        }
+        return po;
+    }
+
+    //operatorul >>
+    friend istream& operator>>(istream& ia, SpitalPrivat& obj)
+    {
+        if (obj.tipuriSectii != NULL)
+        {
+            delete[] obj.tipuriSectii;
+        }
+        cout << "Introduceti numarul de sectii: ";
+        ia >> obj.nrSectii;
+        cout << "Introduceti tipurile de sectii: ";
+        ia >> obj.nrSectii;
+        cout << "Introduceti tipurile de sectii: ";
+        obj.tipuriSectii = new string[obj.nrSectii];
+        for (int i = 0;i < obj.nrSectii;i++)
+        {
+            ia >> obj.tipuriSectii[i];
+        }
+        return ia;
+    }
+
+    //destructor
+    ~SpitalPrivat()
+    {
+        if (this->tipuriSectii != NULL)
+        {
+            delete[] this->tipuriSectii;
+        }
+    }
+
+    //getteri
+    int getNrSpitale()
+    {
+        return this->nrSectii;
+    }
+    string* getTipuriSpitale()
+    {
+        return this->tipuriSectii;
+    }
+
+    //setteri
+    void setSpitale1(int nrSpitaleNou, string* tipuriSpitaleNoi)
+    {
+        if (this->tipuriSectii != NULL)
+        {
+            delete[] this->tipuriSectii;
+        }
+        this->nrSectii = nrSpitaleNou;
+        this->tipuriSectii = tipuriSpitaleNoi;
+
+        for (int i = 0;i < this->nrSectii;i++)
+        {
+            this->tipuriSectii[i] = tipuriSectii[i];
+        }
+    }
+
+    //metode
+    //metoda pentru afisarea tuturor tipurilor de sectii
+    void afiseazaTipuriSectii()
+    {
+        cout << "Tipuri de sectii in Spitalul Privat:" << endl;
+        for (int i = 0; i < nrSectii; i++)
+        {
+            cout << tipuriSectii[i] << endl;
+        }
+    }
+
+
+};
+
 void main()
 {
     //Clasa Spital:
@@ -1576,41 +1716,41 @@ void main()
 
     cout << endl << endl << endl << endl << endl << endl << endl;
 
-    cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! SUPRAINCARCAREA OPERATORULUI <= !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
-    s1 <= s3;
-    cout << "Suprafata spitalului s1:" << s1.getSuprafataMp() << endl;
-    cout << "Suprafata spitalului s3:" << s3.getSuprafataMp() << endl;
-    cout << "Suprafata spitalului s1 este <= suprafata spitalului s3? (1-ADEVARAT; 0-FALS)" << (s1 <= s3) << endl;
-    if (s1 <= s3)
-    {
-        cout << "Suprafata spitalului s1 este <= suprafata spitalului s2" << endl;
-    }
-    else
-    {
-        cout << "Suprafata spitalului s1 este >= suprafata spitalului s3" << endl;
-    }
-    cout << endl << endl << endl;
+    //cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! SUPRAINCARCAREA OPERATORULUI <= !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+    //s1 <= s3;
+    //cout << "Suprafata spitalului s1:" << s1.getSuprafataMp() << endl;
+    //cout << "Suprafata spitalului s3:" << s3.getSuprafataMp() << endl;
+    //cout << "Suprafata spitalului s1 este <= suprafata spitalului s3? (1-ADEVARAT; 0-FALS)" << (s1 <= s3) << endl;
+    //if (s1 <= s3)
+    //{
+    //    cout << "Suprafata spitalului s1 este <= suprafata spitalului s2" << endl;
+    //}
+    //else
+    //{
+    //    cout << "Suprafata spitalului s1 este >= suprafata spitalului s3" << endl;
+    //}
+    //cout << endl << endl << endl;
 
-    cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! SUPRAINCARCAREA OPERATORULUI [] !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
-    cout << "Numele medicului cu indexul 2 din spitalul s1 este:" << s1[2] << endl;
-    cout << "Numele medicului cu indexul 2 din spitalul s1 este:" << s1[7] << endl;
+    //cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! SUPRAINCARCAREA OPERATORULUI [] !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+    //cout << "Numele medicului cu indexul 2 din spitalul s1 este:" << s1[2] << endl;
+    //cout << "Numele medicului cu indexul 2 din spitalul s1 este:" << s1[7] << endl;
 
-    cout << endl << endl << endl;
+    //cout << endl << endl << endl;
 
-    cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! SUPRAINCARCAREA OPERATORULUI DE NEGATIE !  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
-    cout << "Spitalul s3 are pacienti la ATI? (1-DA! / 0-NU!)" << s3.getExistaPacientiLaAti() << endl;
-    !s3;
-    cout << "Spitalul s3 are pacienti la ATI? (1-DA! / 0-NU!)" << s3.getExistaPacientiLaAti() << endl;
-    cout << endl << endl << endl;
+    //cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! SUPRAINCARCAREA OPERATORULUI DE NEGATIE !  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+    //cout << "Spitalul s3 are pacienti la ATI? (1-DA! / 0-NU!)" << s3.getExistaPacientiLaAti() << endl;
+    //!s3;
+    //cout << "Spitalul s3 are pacienti la ATI? (1-DA! / 0-NU!)" << s3.getExistaPacientiLaAti() << endl;
+    //cout << endl << endl << endl;
 
 
-    /*cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! SUPRAINCARCAREA OPERATORULUI >> !!!!!!!!!!!!!!!!!!!!!!!!" << endl;
-    cin >> s1;
-    cout << endl << endl << endl;*/
+    ///*cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! SUPRAINCARCAREA OPERATORULUI >> !!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+    //cin >> s1;
+    //cout << endl << endl << endl;*/
 
-    cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! SUPRAINCARCAREA OPERATORULUI << !!!!!!!!!!!!!!!!!!!!!!!!" << endl;
-    cout << s3;
-    cout << endl << endl << endl;
+    //cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! SUPRAINCARCAREA OPERATORULUI << !!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+    //cout << s3;
+    //cout << endl << endl << endl;
 
     //vector Spital
     /*int nrSpitale;
@@ -1630,7 +1770,7 @@ void main()
     cout << endl << endl << endl << endl << endl << endl;
     */
 
-    cout << endl << endl << endl;
+    /*cout << endl << endl << endl;
     cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!! FISIERE TEXT !!!!!!!!!!!!!!!!!!" << endl;
     ofstream f1("SpitaleFisierText.txt", ios::out);
     f1 << s1;
@@ -1641,7 +1781,7 @@ void main()
     f2 >> s2;
     f1.close();
 
-    cout << "Obiectul dupa ce a fost citit din fisierul text:" << endl << s2 << endl << endl;
+    cout << "Obiectul dupa ce a fost citit din fisierul text:" << endl << s2 << endl << endl;*/
 
     //Clasa VaccinCovid
 
@@ -1913,7 +2053,7 @@ void main()
     //cout << v1;
     //cout << endl << endl << endl;
 
-    cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!! FISIERE TEXT !!!!!!!!!!!!!!!!!!" << endl;
+   /* cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!! FISIERE TEXT !!!!!!!!!!!!!!!!!!" << endl;
     ofstream g1("VaccinCovid.txt", ios::out);
     g1 << v2;
     g1.close();
@@ -1923,7 +2063,7 @@ void main()
     g3 >> v2;
     g1.close();
 
-    cout << "Obiectul dupa ce a fost citit din fisierul text:" << endl << v2 << endl << endl;
+    cout << "Obiectul dupa ce a fost citit din fisierul text:" << endl << v2 << endl << endl;*/
 
 
     ////vector VaccinCovid
@@ -2168,86 +2308,86 @@ void main()
 
     cout << endl << endl << endl;
 
-    cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! SUPRAINCARCAREA OPERATORULUI += !!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
-    cout << "Pacientul p3 inainde de apelul operatorului +=:" << endl;
-    p3.afisare();
-    cout << endl << endl;
-    p3 += 760.5;
-    cout << "Pacientul p3 dupa apelul operatorului +=";
-    p3.afisare();
-    cout << endl << endl << endl;
+    /* cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! SUPRAINCARCAREA OPERATORULUI += !!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+     cout << "Pacientul p3 inainde de apelul operatorului +=:" << endl;
+     p3.afisare();
+     cout << endl << endl;
+     p3 += 760.5;
+     cout << "Pacientul p3 dupa apelul operatorului +=";
+     p3.afisare();
+     cout << endl << endl << endl;
 
-    cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! SUPRAINCARCAREA OPERATORULUI [] !!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
-    cout << "Costul spitalizarilor cu indexul 2 pentru pacientul p1 este: " << p1[2] << endl;
-    cout << "Costu spitalizarilor cu indexul 2 pentru pacientul p1 este: " << p1[11];
-    cout << endl << endl << endl;
+     cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! SUPRAINCARCAREA OPERATORULUI [] !!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+     cout << "Costul spitalizarilor cu indexul 2 pentru pacientul p1 este: " << p1[2] << endl;
+     cout << "Costu spitalizarilor cu indexul 2 pentru pacientul p1 este: " << p1[11];
+     cout << endl << endl << endl;*/
 
-    //cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! SUPRAINCARCAREA OPERATORULUI >> !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
-    //cin >> p1;
-    //cout << endl << endl << endl;
+     //cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! SUPRAINCARCAREA OPERATORULUI >> !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+     //cin >> p1;
+     //cout << endl << endl << endl;
 
-    //cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! SUPRAINCARCAREA OPERATORULUI << !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
-    //cout << p2;
-    //cout << endl << endl << endl;
+     //cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! SUPRAINCARCAREA OPERATORULUI << !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+     //cout << p2;
+     //cout << endl << endl << endl;
 
-    ////vector Pacienti
-    //int nrPacienti;
-    //cout << "Introduceti numarul pacientilor: ";
-    //cin >> nrPacienti;
-    //Pacient* vectorPacienti = new Pacient[nrPacienti];
-    //for (int i = 0;i < nrPacienti;i++)
-    //{
-    //    cout << "Infomatii pacienti: " << i + 1 << ":" << endl;
-    //    cin >> vectorPacienti[i];
-    //}
-    //for (int i = 0;i < nrPacienti;i++)
-    //{
-    //    cout << vectorPacienti[i] << endl;
-    //}
-    //delete[] vectorPacienti;
+     ////vector Pacienti
+     //int nrPacienti;
+     //cout << "Introduceti numarul pacientilor: ";
+     //cin >> nrPacienti;
+     //Pacient* vectorPacienti = new Pacient[nrPacienti];
+     //for (int i = 0;i < nrPacienti;i++)
+     //{
+     //    cout << "Infomatii pacienti: " << i + 1 << ":" << endl;
+     //    cin >> vectorPacienti[i];
+     //}
+     //for (int i = 0;i < nrPacienti;i++)
+     //{
+     //    cout << vectorPacienti[i] << endl;
+     //}
+     //delete[] vectorPacienti;
 
-    //const int nrLinii = 2;
-    //const int nrColoane = 2;
-    //
-    //Pacient matricePacient[nrLinii][nrColoane];
-    //for (int i = 0;i < nrLinii;i++)
-    //{
-    //    for (int j = 0;j < nrColoane;j++)
-    //    {
-    //        cout << "Informatiile pacientului [" << i + 1 << "][" << j + 1 << "]: " << endl;
-    //        cin >> matricePacient[i][j];
-    //    }
-    //}
+     //const int nrLinii = 2;
+     //const int nrColoane = 2;
+     //
+     //Pacient matricePacient[nrLinii][nrColoane];
+     //for (int i = 0;i < nrLinii;i++)
+     //{
+     //    for (int j = 0;j < nrColoane;j++)
+     //    {
+     //        cout << "Informatiile pacientului [" << i + 1 << "][" << j + 1 << "]: " << endl;
+     //        cin >> matricePacient[i][j];
+     //    }
+     //}
 
-    //for (int i = 0;i < nrLinii;i++)
-    //{
-    //    for (int j = 0;j < nrColoane;j++)
-    //    {
-    //        cout << "Pacientul [" << i + 1 << "][" << j + 1 << "]: " << endl;
-    //        cout << matricePacient[i][j] << " ";
-    //    }
-    //    cout << endl << endl;
-    //}
+     //for (int i = 0;i < nrLinii;i++)
+     //{
+     //    for (int j = 0;j < nrColoane;j++)
+     //    {
+     //        cout << "Pacientul [" << i + 1 << "][" << j + 1 << "]: " << endl;
+     //        cout << matricePacient[i][j] << " ";
+     //    }
+     //    cout << endl << endl;
+     //}
 
 
 
-    //cout << endl << endl << endl << endl << endl;
+     //cout << endl << endl << endl << endl << endl;
 
-    //AfisareDetaliiSpital(s1);
-    //AfisareDetaliiPacient(p1);
+     //AfisareDetaliiSpital(s1);
+     //AfisareDetaliiPacient(p1);
 
-    fstream f3("PacientiFisierBinar.bin", ios::binary | ios::out);
-    p2.scriereInBinar(f3);
-    f3.close();
+    /* fstream f3("PacientiFisierBinar.bin", ios::binary | ios::out);
+     p2.scriereInBinar(f3);
+     f3.close();
 
-    fstream f4("PacientiFisierBinar.bin", ios::binary | ios::in);
-    cout << "Obiectul p3 inainte de a fi citit din fisierul binar: " << endl << p3 << endl << endl;
-    p3.citireDinBinar(f4);
-    f4.close();
-    f4.close();
-    cout << "Obiectul p3 dupa ce a fost citit din fisierul binar: " << p3 << endl << endl;
+     fstream f4("PacientiFisierBinar.bin", ios::binary | ios::in);
+     cout << "Obiectul p3 inainte de a fi citit din fisierul binar: " << endl << p3 << endl << endl;
+     p3.citireDinBinar(f4);
+     f4.close();
+     f4.close();
+     cout << "Obiectul p3 dupa ce a fost citit din fisierul binar: " << p3 << endl << endl;*/
 
-    //clasa oras
+     //clasa oras
     Oras o1;
     cout << "Denumirea orasului este: " << o1.getDenumireOras() << endl;
     cout << "Orasul este capitala? (1-DA!/0-NU!): " << o1.getEsteCapitala() << endl;
@@ -2356,21 +2496,390 @@ void main()
     }
     cout << endl << endl << endl << endl << endl;
 
-    cout << "!!!!!!!!!!!!!!!!!!!!! SUPRAINCARCAREA OPERATORILOR: !!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
-    cout << endl << endl;
+    //cout << "!!!!!!!!!!!!!!!!!!!!! SUPRAINCARCAREA OPERATORILOR: !!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+    //cout << endl << endl;
 
-    cout << "!!!!!!!!!!!!!!!!!!!!!!!! SUPRAINCARCAREA OPERATORULUI << !!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
-    cout << o3;
-    cout << endl << endl << endl;
-
-    //cout << "!!!!!!!!!!!!!!!!!!!!!!!! SUPRAINCARCAREA OPERATORULUI >> !!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
-    //cin >> o1;
+    //cout << "!!!!!!!!!!!!!!!!!!!!!!!! SUPRAINCARCAREA OPERATORULUI << !!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+    //cout << o3;
     //cout << endl << endl << endl;
 
-    cout << "!!!!!!!!!!!!!!!!!!!!!!!! SUPRAINCARCAREA OPERATORULUI [] !!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
-    cout << o3 << endl << endl;
-    cout << "Spitalul de pe pozitia 2 din orasul o3 este: " << o3[2];
+    ////cout << "!!!!!!!!!!!!!!!!!!!!!!!! SUPRAINCARCAREA OPERATORULUI >> !!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+    ////cin >> o1;
+    ////cout << endl << endl << endl;
+
+    //cout << "!!!!!!!!!!!!!!!!!!!!!!!! SUPRAINCARCAREA OPERATORULUI [] !!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+    //cout << o3 << endl << endl;
+    //cout << "Spitalul de pe pozitia 2 din orasul o3 este: " << o3[2];
+    //cout << endl << endl << endl;
+
+    //cout << endl << endl << endl << endl << endl << endl;
+
+
+
+    cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!! RELATIA DE IS-A !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl << endl;
+    SpitalPrivat sp1;
+    cout << "Numar sectii: " << sp1.getNrSpitale() << endl;
+    cout << "Tipuri sectii: " << endl;
+    for (int i = 0;i < sp1.getNrSpitale();i++)
+    {
+        cout << sp1.getTipuriSpitale()[i] << " ; ";
+    }
+    cout << "An constructie: " << sp1.getAnConstructie() << endl;
+    cout << "Denumire spital: " << sp1.getDenumireSpital() << endl;
+    cout << "Oras spital: " << sp1.getOrasSpital() << endl;
+    cout << "Suprafata m^2: " << sp1.getSuprafataMp() << endl;
+    cout << "Numar medici: " << sp1.getNrMedici() << endl;
+    cout << "Numele medicilor: " << endl;
+    for (int i = 0; i < sp1.getNrMedici(); i++)
+    {
+        cout << "Nume: " << sp1.getNumeMedici()[i] << " ; ";
+    }
+    cout << endl;
+    cout << "Exista pacienti la ATI: ";
+    if (sp1.getExistaPacientiLaAti() == 1)
+    {
+        cout << "DA!" << endl;
+    }
+    else
+    {
+        cout << "NU!" << endl;
+    }
+    cout << endl << endl;
+
+    string tipuriSectii1[3] = { "Neurologie","Pediatrie","ORL" };
+    string numeMediciSpitalPrivat1[4] = { "Sima", "Negoita", "Badea", "Ristea" };
+    SpitalPrivat sp2(3, tipuriSectii1, 2006, "IoanLascar", "Brasov", 273.55, 3, numeMediciSpitalPrivat1, 1);
+    cout << "Numar sectii: " << sp2.getNrSpitale() << endl;
+    cout << "Tipuri sectii: " << endl;
+    for (int i = 0;i < sp2.getNrSpitale();i++)
+    {
+        cout << sp2.getTipuriSpitale()[i] << " ; ";
+    }
+    cout << "An constructie: " << sp2.getAnConstructie() << endl;
+    cout << "Denumire spital: " << sp2.getDenumireSpital() << endl;
+    cout << "Oras spital: " << sp2.getOrasSpital() << endl;
+    cout << "Suprafata m^2: " << sp2.getSuprafataMp() << endl;
+    cout << "Numar medici: " << sp2.getNrMedici() << endl;
+    cout << "Numele medicilor: " << endl;
+    for (int i = 0; i < sp2.getNrMedici(); i++)
+    {
+        cout << "Nume: " << sp2.getNumeMedici()[i] << " ; ";
+    }
+    cout << endl;
+    cout << "Exista pacienti la ATI: ";
+    if (sp2.getExistaPacientiLaAti() == 1)
+    {
+        cout << "DA!" << endl;
+    }
+    else
+    {
+        cout << "NU!" << endl;
+    }
     cout << endl << endl << endl;
 
+    cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!! APELUL SETTERILOR !!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+    cout << "Obiectul sp1 inainte de modificari: " << endl;
+    cout << "Numar sectii: " << sp1.getNrSpitale() << endl;
+    cout << "Tipuri sectii: " << endl;
+    for (int i = 0;i < sp1.getNrSpitale();i++)
+    {
+        cout << sp1.getTipuriSpitale()[i] << " ; ";
+    }
+    cout << "An constructie: " << sp1.getAnConstructie() << endl;
+    cout << "Denumire spital: " << sp1.getDenumireSpital() << endl;
+    cout << "Oras spital: " << sp1.getOrasSpital() << endl;
+    cout << "Suprafata m^2: " << sp1.getSuprafataMp() << endl;
+    cout << "Numar medici: " << sp1.getNrMedici() << endl;
+    cout << "Numele medicilor: " << endl;
+    for (int i = 0; i < sp1.getNrMedici(); i++)
+    {
+        cout << "Nume: " << sp1.getNumeMedici()[i] << " ; ";
+    }
+    cout << endl;
+    cout << "Exista pacienti la ATI: ";
+    if (sp1.getExistaPacientiLaAti() == 1)
+    {
+        cout << "DA!" << endl;
+    }
+    else
+    {
+        cout << "NU!" << endl;
+    }
+    cout << endl << endl << endl;
+
+    cout << "Obeictul sp1 dupa modificari: " << endl;
+
+    //setteri
+    string tipuriSectii2[3] = { "Cardiologie","Ortopedie" };
+    string numeMediciSpitalPrivat2[3] = { "Buruiana","Miron" };
+    sp1.setDenumireSpital("SfantulSpiridon");
+    sp1.setSuprafataMp(353.77);
+    sp1.setExistaPacientiLaAti(1);
+    sp1.setOrasSpital("Brasov");
+    sp1.setMedici(3, numeMediciSpitalPrivat2);
+
+
+   
+
+    cout << "Numar sectii: " << sp1.getNrSpitale() << endl;
+    cout << "Tipuri sectii: " << endl;
+    for (int i = 0;i < sp1.getNrSpitale();i++)
+    {
+        cout << sp1.getTipuriSpitale()[i] << " ; ";
+    }
+    cout << "An constructie: " << sp1.getAnConstructie() << endl;
+    cout << "Denumire spital: " << sp1.getDenumireSpital() << endl;
+    cout << "Oras spital: " << sp1.getOrasSpital() << endl;
+    cout << "Suprafata m^2: " << sp1.getSuprafataMp() << endl;
+    cout << "Numar medici: " << sp1.getNrMedici() << endl;
+    cout << "Numele medicilor: " << endl;
+    for (int i = 0; i < sp1.getNrMedici(); i++)
+    {
+        cout << "Nume: " << sp1.getNumeMedici()[i] << " ; ";
+    }
+    cout << endl;
+    cout << "Exista pacienti la ATI: ";
+    if (sp1.getExistaPacientiLaAti() == 1)
+    {
+        cout << "DA!" << endl;
+    }
+    else
+    {
+        cout << "NU!" << endl;
+    }
+    cout << endl << endl;
+
+    cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! CONSTRUCTORUL DE COPIERE !!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+    SpitalPrivat sp3 = sp2;
+
+    cout << "!!!!!!!!! Obiectul existent sp2 !!!!!!!!!!" << endl;
+    cout << "Numar sectii: " << sp2.getNrSpitale() << endl;
+    cout << "Tipuri sectii: " << endl;
+    for (int i = 0;i < sp2.getNrSpitale();i++)
+    {
+        cout << sp2.getTipuriSpitale()[i] << " ; ";
+    }
+    cout << "An constructie: " << sp2.getAnConstructie() << endl;
+    cout << "Denumire spital: " << sp2.getDenumireSpital() << endl;
+    cout << "Oras spital: " << sp2.getOrasSpital() << endl;
+    cout << "Suprafata m^2: " << sp2.getSuprafataMp() << endl;
+    cout << "Numar medici: " << sp2.getNrMedici() << endl;
+    cout << "Numele medicilor: " << endl;
+    for (int i = 0; i < sp2.getNrMedici(); i++)
+    {
+        cout << "Nume: " << sp2.getNumeMedici()[i] << " ; ";
+    }
+    cout << endl;
+    cout << "Exista pacienti la ATI: ";
+    if (sp2.getExistaPacientiLaAti() == 1)
+    {
+        cout << "DA!" << endl;
+    }
+    else
+    {
+        cout << "NU!" << endl;
+    }
+    cout << endl << endl << endl;
+
+    cout << "!!!!!!!!!!! Obiectul nou sp3 !!!!!!!!" << endl;
+    cout << "Numar sectii: " << sp3.getNrSpitale() << endl;
+    cout << "Tipuri sectii: " << endl;
+    for (int i = 0;i < sp3.getNrSpitale();i++)
+    {
+        cout << sp2.getTipuriSpitale()[i] << " ; ";
+    }
+    cout << "An constructie: " << sp3.getAnConstructie() << endl;
+    cout << "Denumire spital: " << sp3.getDenumireSpital() << endl;
+    cout << "Oras spital: " << sp3.getOrasSpital() << endl;
+    cout << "Suprafata m^2: " << sp3.getSuprafataMp() << endl;
+    cout << "Numar medici: " << sp3.getNrMedici() << endl;
+    cout << "Numele medicilor: " << endl;
+    for (int i = 0; i < sp3.getNrMedici(); i++)
+    {
+        cout << "Nume: " << sp3.getNumeMedici()[i] << " ; ";
+    }
+    cout << endl;
+    cout << "Exista pacienti la ATI: ";
+    if (sp3.getExistaPacientiLaAti() == 1)
+    {
+        cout << "DA!" << endl;
+    }
+    else
+    {
+        cout << "NU!" << endl;
+    }
+    cout << endl << endl << endl;
+
+    cout << "!!!!!!!!!!!!!!!!!!! OPERATORUL = !!!!!!!!!!!!!!!" << endl;
+    cout << "Obiectul sablon sp1: " << endl;
+    cout << "Numar sectii: " << sp1.getNrSpitale() << endl;
+    cout << "Tipuri sectii: " << endl;
+    for (int i = 0;i < sp1.getNrSpitale();i++)
+    {
+        cout << sp1.getTipuriSpitale()[i] << " ; ";
+    }
+    cout << "An constructie: " << sp1.getAnConstructie() << endl;
+    cout << "Denumire spital: " << sp1.getDenumireSpital() << endl;
+    cout << "Oras spital: " << sp1.getOrasSpital() << endl;
+    cout << "Suprafata m^2: " << sp1.getSuprafataMp() << endl;
+    cout << "Numar medici: " << sp1.getNrMedici() << endl;
+    cout << "Numele medicilor: " << endl;
+    for (int i = 0; i < sp1.getNrMedici(); i++)
+    {
+        cout << "Nume: " << sp1.getNumeMedici()[i] << " ; ";
+    }
+    cout << endl;
+    cout << "Exista pacienti la ATI: ";
+    if (sp1.getExistaPacientiLaAti() == 1)
+    {
+        cout << "DA!" << endl;
+    }
+    else
+    {
+        cout << "NU!" << endl;
+    }
+    cout << endl << endl;
+
+    cout << "Obiectul sp3 inainte de modificari: " << endl;
+    cout << "Numar sectii: " << sp3.getNrSpitale() << endl;
+    cout << "Tipuri sectii: " << endl;
+    for (int i = 0;i < sp3.getNrSpitale();i++)
+    {
+        cout << sp2.getTipuriSpitale()[i] << " ; ";
+    }
+    cout << "An constructie: " << sp3.getAnConstructie() << endl;
+    cout << "Denumire spital: " << sp3.getDenumireSpital() << endl;
+    cout << "Oras spital: " << sp3.getOrasSpital() << endl;
+    cout << "Suprafata m^2: " << sp3.getSuprafataMp() << endl;
+    cout << "Numar medici: " << sp3.getNrMedici() << endl;
+    cout << "Numele medicilor: " << endl;
+    for (int i = 0; i < sp3.getNrMedici(); i++)
+    {
+        cout << "Nume: " << sp3.getNumeMedici()[i] << " ; ";
+    }
+    cout << endl;
+    cout << "Exista pacienti la ATI: ";
+    if (sp3.getExistaPacientiLaAti() == 1)
+    {
+        cout << "DA!" << endl;
+    }
+    else
+    {
+        cout << "NU!" << endl;
+    }
+    cout << endl << endl << endl;
+
+    sp3 = sp1;
+
+    cout << "Obiectul sp3 dupa modificari: " << endl;
+    cout << "Numar sectii: " << sp3.getNrSpitale() << endl;
+    cout << "Tipuri sectii: " << endl;
+    for (int i = 0;i < sp3.getNrSpitale();i++)
+    {
+        cout << sp3.getTipuriSpitale()[i] << " ; ";
+    }
+    cout << "An constructie: " << sp3.getAnConstructie() << endl;
+    cout << "Denumire spital: " << sp3.getDenumireSpital() << endl;
+    cout << "Oras spital: " << sp3.getOrasSpital() << endl;
+    cout << "Suprafata m^2: " << sp3.getSuprafataMp() << endl;
+    cout << "Numar medici: " << sp3.getNrMedici() << endl;
+    cout << "Numele medicilor: " << endl;
+    for (int i = 0; i < sp3.getNrMedici(); i++)
+    {
+        cout << "Nume: " << sp3.getNumeMedici()[i] << " ; ";
+    }
+    cout << endl;
+    cout << "Exista pacienti la ATI: ";
+    if (sp3.getExistaPacientiLaAti() == 1)
+    {
+        cout << "DA!" << endl;
+    }
+    else
+    {
+        cout << "NU!" << endl;
+    }
+    cout << endl << endl << endl;
+
+    cout << "!!!!!!!!!!!! Metoda !!!!!!!!!!!!!!!!" << endl;
+    cout << "Numar sectii: " << sp2.getNrSpitale() << endl;
+    cout << "Tipuri sectii: " << endl;
+    for (int i = 0;i < sp2.getNrSpitale();i++)
+    {
+        cout << sp2.getTipuriSpitale()[i] << " ; ";
+    }
+    cout << "An constructie: " << sp2.getAnConstructie() << endl;
+    cout << "Denumire spital: " << sp2.getDenumireSpital() << endl;
+    cout << "Oras spital: " << sp2.getOrasSpital() << endl;
+    cout << "Suprafata m^2: " << sp2.getSuprafataMp() << endl;
+    cout << "Numar medici: " << sp2.getNrMedici() << endl;
+    cout << "Numele medicilor: " << endl;
+    for (int i = 0; i < sp2.getNrMedici(); i++)
+    {
+        cout << "Nume: " << sp2.getNumeMedici()[i] << " ; ";
+    }
+    cout << endl;
+    cout << "Exista pacienti la ATI: ";
+    if (sp2.getExistaPacientiLaAti() == 1)
+    {
+        cout << "DA!" << endl;
+    }
+    else
+    {
+        cout << "NU!" << endl;
+    }
+    cout << endl << endl;
+    cout << "Tipurile de sectii din spitalul sp2 sunt: " << endl;
+    sp2.afiseazaTipuriSectii();
+
+    cout << "!!!!!!!!!!!!!!!!!!!!! OPERATORI !!!!!!!!!!!!!!!!!!!!" << endl << endl;
+    cout << "!!!!!!!!!!!!!!!!!!!!!!!!!! SUPRAINCARCAREA OPERATORULUI << !!!!!!!!!!!!!!!!!!!!!" << endl;
+    cout << sp2;
+    cout << endl << endl << endl;
+
+    /*cout << "!!!!!!!!!!!!!!!!!!!!!!!!!! SUPRAINCARCAREA OPERATORULUI >> !!!!!!!!!!!!!!!!!!!!!" << endl;
+    cin >> s3;
+    cout << endl << endl << endl;*/
+
+    cout << "!!!!!!!!!!!!!!!!!!!!!!! UPCASTING !!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+    cout << "Inainte de upcasting: " << endl;
+    cout << "Obiectul s3: " << endl;
+    cout << sp3 << endl << endl;
+
+    cout << "SpitalPrivat 1:" << endl;
+    cout << "Numar sectii: " << sp1.getNrSpitale() << endl;
+    cout << "Tipuri sectii: " << endl;
+    for (int i = 0;i < sp1.getNrSpitale();i++)
+    {
+        cout << sp1.getTipuriSpitale()[i] << " ; ";
+    }
+    cout << "An constructie: " << sp1.getAnConstructie() << endl;
+    cout << "Denumire spital: " << sp1.getDenumireSpital() << endl;
+    cout << "Oras spital: " << sp1.getOrasSpital() << endl;
+    cout << "Suprafata m^2: " << sp1.getSuprafataMp() << endl;
+    cout << "Numar medici: " << sp1.getNrMedici() << endl;
+    cout << "Numele medicilor: " << endl;
+    for (int i = 0; i < sp1.getNrMedici(); i++)
+    {
+        cout << "Nume: " << sp1.getNumeMedici()[i] << " ; ";
+    }
+    cout << endl;
+    cout << "Exista pacienti la ATI: ";
+    if (sp1.getExistaPacientiLaAti() == 1)
+    {
+        cout << "DA!" << endl;
+    }
+    else
+    {
+        cout << "NU!" << endl;
+    }
+    cout << endl << endl;
+
+    s3 = sp3;
+
+    cout << "Dupa upcasting: " << endl;
+    cout << s3 << endl << endl;
+
+    Spital sNou = sp1;
+    cout << sNou << endl << endl;
 
 }
