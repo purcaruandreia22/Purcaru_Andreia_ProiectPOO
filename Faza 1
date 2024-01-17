@@ -2,6 +2,8 @@
 //Domeniul ales: PAnDemie
 //Clasele alese: Spital, Vaccin, Pacient
 
+//am adaugat cateva comentarii pentru a putea sa imi fie usor la prezentarea proiectului. 
+
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <string>
@@ -1542,7 +1544,7 @@ public:
     }
 
     //constructor de copiere
-    PacientVaccinat(const PacientVaccinat& pacient):Pacient(pacient)
+    PacientVaccinat(const PacientVaccinat& pacient) :Pacient(pacient)
     {
         this->nrEfecteAdverse = pacient.nrEfecteAdverse;
         this->efecteAdverseVaccin = new string[this->nrEfecteAdverse];
@@ -1624,6 +1626,7 @@ public:
 void main()
 {
     //Clasa Spital:
+    cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! CLASA SPITAL !!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl << endl << endl;
 
     cout << "Toate spitalele au autorizatie de functionare?:";
     if (Spital::getAutorizatieFunctionare() == 1)
@@ -1934,6 +1937,7 @@ void main()
     cout << "Obiectul dupa ce a fost citit din fisierul text:" << endl << s2 << endl << endl;*/
 
     //Clasa VaccinCovid
+    cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! CLASA VaccinCovid !!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl << endl << endl;
 
     cout << "Numele afectiunii pentru care se foloseste vaccinul este: " << VaccinCovid::getNumeAfectiune() << endl;
 
@@ -2237,6 +2241,7 @@ void main()
 
 
     ////Clasa Pacient:
+    cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! CLASA PACIENT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl << endl << endl;
 
     cout << "Taxa de asigurare medicala: " << Pacient::getTaxaAsigurareMedicala() << endl;
 
@@ -2537,7 +2542,10 @@ void main()
      f4.close();
      cout << "Obiectul p3 dupa ce a fost citit din fisierul binar: " << p3 << endl << endl;*/
 
-     //clasa oras
+    cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! RELATIA HAS-A !!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl << endl << endl << endl;
+    cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! CLASA ORAS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl << endl << endl;
+
+    //clasa oras
     Oras o1;
     cout << "Denumirea orasului este: " << o1.getDenumireOras() << endl;
     cout << "Orasul este capitala? (1-DA!/0-NU!): " << o1.getEsteCapitala() << endl;
@@ -2551,7 +2559,7 @@ void main()
     cout << endl << endl << endl;
 
     Spital vectSpitale1[] = { s1,s2,s3 };
-    Oras o2("Bacau", 0, 3, vectSpitale1, "Bacau");
+    Oras o2("Bucuresti", 0, 3, vectSpitale1, "Bucuresti");
     cout << "Denumirea orasului este: " << o2.getDenumireOras() << endl;
     cout << "Orasul este capitala? (1-DA!/0-NU!): " << o2.getEsteCapitala() << endl;
     cout << "Judetul din care provine orasul: " << o2.getJudet() << endl;
@@ -2667,6 +2675,8 @@ void main()
 
 
     cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!! RELATIA DE IS-A !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl << endl;
+    cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! CLASA SpitalPrivat !!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl << endl << endl;
+
     SpitalPrivat sp1;
     cout << "Numar sectii: " << sp1.getNrSpitale() << endl;
     cout << "Tipuri sectii: " << endl;
@@ -2759,7 +2769,7 @@ void main()
 
     cout << "Obeictul sp1 dupa modificari: " << endl;
 
-    
+
     string tipuriSectii2[3] = { "Cardiologie","Ortopedie" };
     string numeMediciSpitalPrivat2[3] = { "Buruiana","Miron" };
     sp1.setDenumireSpital("SfantulSpiridon");
@@ -3035,6 +3045,8 @@ void main()
     cout << endl << endl << endl << endl << endl << endl << endl;
 
     //clasa pacientVaccinat
+    cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! CLASA PacientVaccinat !!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl << endl << endl;
+
     PacientVaccinat pv1;
     cout << "CNP-ul pacientului pv1: " << pv1.getCNp() << endl;
     cout << "Nume prenume pacient pv1: " << pv1.getNumePrenume() << endl;
@@ -3060,7 +3072,7 @@ void main()
 
     cout << endl << endl;
 
-    string efecteAdverse1[4] = { "DureriDeCap","DureriMusculare","Greata","SenzatieDeOboseala"};
+    string efecteAdverse1[4] = { "DureriDeCap","DureriMusculare","Greata","SenzatieDeOboseala" };
     float costuriSpitalizarePacientVaccinat1[4] = { 2512,700,1733,208.99 };
     PacientVaccinat pv2(4, efecteAdverse1, "6936644827339", "CozmaMaricela", 26, 77, false, 4, costuriSpitalizarePacientVaccinat1);
     cout << "CNP-ul pacientului pv2: " << pv2.getCNp() << endl;
@@ -3235,7 +3247,7 @@ void main()
     cout << endl << endl;
 
     pv3 = pv1;
-    
+
     cout << "Obiectul pv3 dupa ce a fost modificat: " << endl;
     cout << "CNP-ul pacientului pv3: " << pv3.getCNp() << endl;
     cout << "Nume prenume pacient pv3: " << pv3.getNumePrenume() << endl;
